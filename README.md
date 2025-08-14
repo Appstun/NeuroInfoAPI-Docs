@@ -39,7 +39,7 @@ This repository contains complete documentation for all API endpoints:
 ## 📖 Getting Started
 
 1. **Browse the documentation** - Start with [quickInfo.md](quickInfo.md) for a quick overview
-2. **Get an API token** - Visit the [API Dashboard](https://neuro.appstun.net/dash/) if you need access to protected endpoints
+2. **Get an API token** - Visit the [API Dashboard](https://neuro.appstun.net/apidash/) if you need access to protected endpoints
 3. **Test endpoints** - Use the examples in each documentation file
 4. **Check authentication** - Review [needsAuth.md](needsAuth.md) to see which endpoints require tokens
 5. **Handle errors** - Read [errors.md](errors.md) for error codes and troubleshooting
