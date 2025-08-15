@@ -12,6 +12,7 @@ This repository contains complete documentation for all API endpoints:
 - **[Schedule API](schedule.md)** - Weekly stream schedules
 - **[Twitch API](twitch.md)** - Stream status and VOD data
 - **[Subathon API](subathon.md)** - Subathon goals and progress
+- **[Prebuild Clients](clients/README.md)** - ready-to-use clients for your project
 
 ## 📊 API Features
 
