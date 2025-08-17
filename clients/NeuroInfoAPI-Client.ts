@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
 export class NeuroInfoApiClient {
-  private apiInstance: AxiosInstance;
+  public apiInstance: AxiosInstance;
 
   constructor() {
     this.apiInstance = axios.create({
