@@ -60,6 +60,8 @@ GET https://neuro.appstun.net/api/v1/twitch/stream
   "thumbnailUrl": "https://static-cdn.jtvnw.net/previews-ttv/live_user_vedal987-1920x1080.jpg"
 }
 ```
+*Example response out of date ... sry - fixing on tuesday* <br>
+*For the time being: see [here](https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/clients/NeuroInfoAPI-Client.ts#L145C4-L157C25)*
 
 ### All VODs
 
@@ -93,20 +95,32 @@ Authorization: Bearer YOUR_API_TOKEN
 ```json
 [
   {
-    "streamId": "123456789",
-    "title": "Neuro-sama Stream VOD",
-    "duration": "02:45:30",
-    "createdAt": "2025-07-01T16:00:00Z",
-    "url": "https://www.twitch.tv/videos/123456789",
-    "thumbnailUrl": "https://static-cdn.jtvnw.net/cf_vods/d2nvs31859zcd8/123456789_thumb.jpg"
+    "id": "2525705075",
+    "streamId": "323888365817",
+    "title": "My First Livestream - Neuro-sama",
+    "url": "https://www.twitch.tv/videos/2525705075",
+    "viewable": "public",
+    "type": "archive",
+    "language": "en",
+    "duration": "2h21m20s",
+    "viewCount": 80346,
+    "createdAt": 1753812006000,
+    "publishedAt": 1753812006000,
+    "thumbnailUrl": "https://static-cdn.jtvnw.net/cf_vods/d3fi1amfgojobc/392eb4c5d5a13379e26f_vedal987_323888365817_1753812000//thumb/thumb0-%{width}x%{height}.jpg"
   },
   {
-    "streamId": "987654321",
-    "title": "Evil-sama Stream VOD",
-    "duration": "03:12:45",
-    "createdAt": "2025-06-30T18:00:00Z",
-    "url": "https://www.twitch.tv/videos/987654321",
-    "thumbnailUrl": "https://static-cdn.jtvnw.net/cf_vods/d2nvs31859zcd8/987654321_thumb.jpg"
+    "id": "2534657392",
+    "streamId": "324276445817",
+    "title": "OUTER WILDS w/ VEDAL AND NEURO",
+    "url": "https://www.twitch.tv/videos/2534657392",
+    "viewable": "public",
+    "type": "archive",
+    "language": "en",
+    "duration": "4h27m10s",
+    "viewCount": 112395,
+    "createdAt": 1754676005000,
+    "publishedAt": 1754676005000,
+    "thumbnailUrl": "https://static-cdn.jtvnw.net/cf_vods/d3fi1amfgojobc/5f171bfa046b419abede_vedal987_324276445817_1754675999//thumb/thumb0-%{width}x%{height}.jpg"
   }
 ]
 ```
@@ -150,12 +164,18 @@ Authorization: Bearer YOUR_API_TOKEN
 
 ```json
 {
-  "streamId": "123456789",
-  "title": "Neuro-sama Stream VOD",
-  "duration": "02:45:30",
-  "createdAt": "2025-07-01T16:00:00Z",
-  "url": "https://www.twitch.tv/videos/123456789",
-  "thumbnailUrl": "https://static-cdn.jtvnw.net/cf_vods/d2nvs31859zcd8/123456789_thumb.jpg"
+  "id": "2540872425",
+  "streamId": "331632543357",
+  "title": "neuro saves the life of a fellow AI surely #ad #WhispersfromtheStar",
+  "url": "https://www.twitch.tv/videos/2540872425",
+  "viewable": "public",
+  "type": "archive",
+  "language": "en",
+  "duration": "2h42m10s",
+  "viewCount": 80127,
+  "createdAt": 1755280804000,
+  "publishedAt": 1755280804000,
+  "thumbnailUrl": "https://static-cdn.jtvnw.net/cf_vods/d1m7jfoe9zdc1j/9e7139b8218481657297_vedal987_331632543357_1755280798//thumb/thumb0-%{width}x%{height}.jpg"
 }
 ```
 
