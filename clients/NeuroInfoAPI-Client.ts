@@ -153,7 +153,7 @@ export interface TwitchStreamData {
   tags?: string[];
   isMature?: boolean;
   viewerCount?: number;
-  startetAt?: Date; // Note: API has a typo - "startetAt" instead of "startedAt"
+  startedAt?: Date;
   thumbnailUrl?: string;
 }
 
