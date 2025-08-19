@@ -53,15 +53,26 @@ GET https://neuro.appstun.net/api/v1/twitch/stream
 ```json
 {
   "isLive": true,
-  "title": "Neuro-sama Stream",
-  "game": "Just Chatting",
-  "viewers": 15420,
-  "startedAt": "2025-07-02T14:00:00Z",
-  "thumbnailUrl": "https://static-cdn.jtvnw.net/previews-ttv/live_user_vedal987-1920x1080.jpg"
+	"id": "331913732989",
+	"title": "NEUROSLOP EVIL WASN'T BASED ENOUGH TO DO IT",
+	"game": {
+		"id": "509658",
+		"name": "Just Chatting"
+	},
+	"language": "en",
+	"tags": [
+		"English",
+		"Programming",
+		"Chatting",
+		"Singing",
+		"Vtuber"
+	],
+	"isMature": false,
+	"viewerCount": 5799,
+	"startedAt": "2025-08-19T18:00:43.000Z",
+	"thumbnailUrl": "https://static-cdn.jtvnw.net/previews-ttv/live_user_vedal987-{width}x{height}.jpg",
 }
 ```
-*Example response out of date ... sry - fixing on tuesday* <br>
-*For the time being: see [here](https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/clients/NeuroInfoAPI-Client.ts#L145C4-L157C25)*
 
 ### All VODs
 
