@@ -153,6 +153,38 @@ GET https://neuro.appstun.net/api/v1/schedule/latest
 }
 ```
 
+### Devstream Times
+
+#### Endpoint
+
+`GET https://neuro.appstun.net/api/v1/schedule/devstreamtimes`
+
+#### Description
+
+Returns the timestamps where a devstream happened.
+
+#### Authentication
+
+**Not required** – This is a public endpoint.
+
+#### Parameters
+
+None
+
+#### Request Example
+
+```http
+GET https://neuro.appstun.net/api/v1/schedule/devstreamtimes
+```
+
+#### Response Format
+
+##### Success Response (200)
+
+```json
+[1723680000000, 1723939200000, 1724198400000]
+```
+
 #### Schedule Entry Properties
 
 | Property  | Type   | Description                                          | Always included |

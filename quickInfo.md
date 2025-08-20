@@ -27,6 +27,14 @@ _Full docs of endpoint: [schedule.md](schedule.md)_
 - **Parameters**: None
 - **Public**: Yes
 
+### Devstream Times
+
+`GET /schedule/devstreamtimes`
+
+- **Purpose**: Scheduled times for devstreams
+- **Parameters**: None
+- **Public**: Yes
+
 ## Twitch API
 
 _Full docs of endpoint: [twitch.md](twitch.md)_
