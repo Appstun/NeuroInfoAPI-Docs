@@ -30,8 +30,7 @@ Access Subathon data and goal information. The current subathon endpoint is publ
 
 #### Description
 
-Get the current active subathon data including goals and subscriber count. This is a public endpoint with generous rate limiting.
-
+Get the current active subathon data including goals and subscriber count.
 #### Authentication
 
 **Not required** - This is a public endpoint.
@@ -73,7 +72,7 @@ GET https://neuro.appstun.net/api/v1/subathon/current
 
 #### Description
 
-Get subathon data for a specific year. Requires authentication and applies standard rate limiting.
+Get subathon data for a specific year.
 
 #### Authentication
 

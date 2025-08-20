@@ -29,7 +29,7 @@ Access weekly schedule data from the database. The main endpoint allows you to g
 
 #### Description
 
-Get a weekly schedule from the database for a given week and year. Requires authentication and applies standard rate limiting.
+Get a weekly schedule from the database for a given week and year.
 
 #### Authentication
 
@@ -100,7 +100,7 @@ Authorization: Bearer YOUR_API_TOKEN
 
 #### Description
 
-Get the most recent weekly schedule available in the database. This is a public endpoint with generous rate limiting and does not require authentication.
+Get the most recent weekly schedule available in the database.
 
 #### Authentication
 

@@ -82,7 +82,7 @@ GET https://neuro.appstun.net/api/v1/twitch/stream
 
 #### Description
 
-Get all cached VODs from the database. Requires authentication.
+Get all cached VODs from the database.
 
 #### Authentication
 
@@ -144,7 +144,7 @@ Authorization: Bearer YOUR_API_TOKEN
 
 #### Description
 
-Get a specific VOD by stream ID, or the latest VOD if no ID is provided. Requires authentication.
+Get a specific VOD by stream ID, or the latest VOD if no ID is provided.
 
 #### Authentication
 
