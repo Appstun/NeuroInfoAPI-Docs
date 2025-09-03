@@ -8,24 +8,26 @@
 
 ## Schedule API
 
-- **`GET /schedule`** - Get specific weekly schedules
+- **`GET /api/v1/schedule`** - Get specific weekly schedules
   - Parameters: `week` (required), `year` (optional)
 
 ## Twitch API
 
-- **`GET /twitch/vods`** - Get all VODs
-- **`GET /twitch/vod`** - Get specific or latest VOD
+- **`GET /api/v1/twitch/vods`** - Get all VODs
+- **`GET /api/v1/twitch/vod`** - Get specific or latest VOD
   - Parameters: `streamId` (optional)
 
 ## Subathon API
 
-- **`GET /subathon`** - Get subathon data for specific year
+- **`GET /api/v1/subathon`** - Get subathon data for specific year
   - Parameters: `year` (required)
 
 ---
 
 ## Public Endpoints (no auth required)
 
-- `GET /schedule/latest` - Latest weekly schedule
-- `GET /twitch/stream` - Current stream information
-- `GET /subathon/current` - Current active subathon
+- `GET /api/v1/schedule/latest` - Latest weekly schedule
+- `GET /api/v1/schedule/devstreamtimes` - Devstream timestamps
+- `GET /api/v1/twitch/stream` - Current stream information
+- `GET /api/v1/subathon/current` - Current active subathon
+- `GET /api/test/geterror` - Test error endpoint

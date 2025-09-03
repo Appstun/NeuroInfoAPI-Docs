@@ -15,6 +15,10 @@
 
 `GET https://neuro.appstun.net/api/v1/schedule/latest`
 
+### Devstream Times
+
+`GET https://neuro.appstun.net/api/v1/schedule/devstreamtimes`
+
 ## Description
 
 Access weekly schedule data from the database. The main endpoint allows you to get a specific week's schedule, while the latest endpoint returns the most recent schedule available. Authentication is required for specific week requests.
