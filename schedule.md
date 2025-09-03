@@ -43,7 +43,7 @@ Get a weekly schedule from the database for a given week and year.
 | `year`    | integer | No       | Year (defaults to current year if not provided) |
 
 > [!NOTE]
-> The oldest weekly schedule is week 38 2024. Valid years range from 2023 to current year.
+> The oldest weekly schedule is week 38 2024.
 
 #### Request Examples
 
