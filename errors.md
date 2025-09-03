@@ -85,6 +85,64 @@ All API responses follow a consistent JSON format:
 | `SB3` | `Subathon_InvalidParams`    | Invalid year parameter or year cannot be in the future |
 | `SB4` | `Subathon_NoSubathon`       | No subathon found for the specified year               |
 
+## Testing Endpoint
+
+### Get Error Code
+
+#### Endpoint
+
+`GET https://neuro.appstun.net/api/test/geterror`
+
+#### Description
+
+Get a specific error response by providing an error code. This endpoint is useful for testing error handling in your application and understanding the error response format.
+
+#### Parameters
+
+| Parameter | Type   | Required | Description                                       |
+| --------- | ------ | -------- | ------------------------------------------------- |
+| `code`    | string | No       | Error code to retrieve (e.g., "AP1", "SC1", etc.) |
+
+#### Request Examples
+
+```http
+GET https://neuro.appstun.net/api/test/geterror?code=AP1
+GET https://neuro.appstun.net/api/test/geterror?code=SC1
+GET https://neuro.appstun.net/api/test/geterror
+```
+
+#### Response Format
+
+##### Success Response (418)
+
+When a valid error code is provided:
+
+```json
+{
+  "error": {
+    "code": "AP1",
+    "message": "Internal server error"
+  }
+}
+```
+
+##### Not Found Response (404)
+
+When an invalid or missing error code is provided:
+
+```json
+{
+  "error": "Not Found"
+}
+```
+
+#### Notes
+
+- This endpoint uses status code `418 I'm a teapot` for valid error codes as a testing convention
+- Returns `404 Not Found` for invalid or missing error codes
+- Rate limited using standard tier (100 requests per minute)
+- No authentication required
+
 ## Common Error Scenarios
 
 ### Authentication Issues
