@@ -176,6 +176,7 @@ export interface ScheduleResponse {
   year: number;
   week: number;
   schedule: ScheduleEntry[];
+  isFinal: boolean; // Indicates if the schedule is final or subject to change
 }
 
 export interface ScheduleEntry {

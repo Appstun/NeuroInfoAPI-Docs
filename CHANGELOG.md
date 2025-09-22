@@ -2,6 +2,13 @@
 
 It's definitely time to write a changelog for "important" changes to the docs.
 
+## [22.09.2025]
+
+### Added
+
+- Schedule response properties + isFinal property ([schedule.md](schedule.md))
+- isFinal property to ScheduleResponse interface in TS-Client ([NeuroInfoAPI-Client](clients/NeuroInfoAPI-Client.ts))
+
 ## [17.09.2025]
 
 ### Added

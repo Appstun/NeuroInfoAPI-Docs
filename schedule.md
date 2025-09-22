@@ -92,7 +92,8 @@ Authorization: Bearer YOUR_API_TOKEN
       "message": "TBD Stream",
       "type": "TBD"
     }
-  ]
+  ],
+  "isFinal": true
 }
 ```
 
@@ -153,7 +154,8 @@ GET https://neuro.appstun.net/api/v1/schedule/latest
       "message": "TBD Stream",
       "type": "TBD"
     }
-  ]
+  ],
+  "isFinal": true
 }
 ```
 
@@ -197,6 +199,15 @@ GET https://neuro.appstun.net/api/v1/schedule/devstreamtimes
 | `time`    | number | Unix timestamp in milliseconds                       | Yes             |
 | `message` | string | Schedule message/description                         | Yes             |
 | `type`    | string | Schedule type: "normal", "offline", "TBD", "unknown" | Yes             |
+
+#### Response Properties
+
+| Property   | Type    | Description                                        | Always included |
+| ---------- | ------- | -------------------------------------------------- | --------------- |
+| `year`     | number  | Year of the schedule                               | Yes             |
+| `week`     | number  | Calendar week number (1-53)                        | Yes             |
+| `schedule` | array   | Array of schedule entries (see above)              | Yes             |
+| `isFinal`  | boolean | Whether this schedule is considered final/complete | Yes             |
 
 ## Error Responses
 
