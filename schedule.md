@@ -5,7 +5,7 @@
 ## Endpoints
 
 > [!IMPORTANT]
-> Schedules are saved manually to the database, so the latest schedule may not be accessible right away.
+> "Latest" updates only on new official releases; otherwise it returns the last published schedule.
 
 ### Specific Weekly Schedule
 
@@ -208,6 +208,15 @@ GET https://neuro.appstun.net/api/v1/schedule/devstreamtimes
 | `week`     | number  | Calendar week number (1-53)                        | Yes             |
 | `schedule` | array   | Array of schedule entries (see above)              | Yes             |
 | `isFinal`  | boolean | Whether this schedule is considered final/complete | Yes             |
+
+> [!NOTE]
+> Schedule collection & finalization:
+>
+> - Fetched from Twitch Schedule fetching and a announcements channel\* on the Neuro-sama Discord server.
+> - Twitch fetching stops on first detected change and also stops when a announcement gets posted; results may be incomplete.
+> - Auto-fetched schedules: `"isFinal": false`. Then after manual confirmation: `"isFinal": true`. <br>
+
+<small>\* The schedules are fetched from a private channel that follows the announcement channel on the Neuro-sama Discord server (messages are forwarded from the latter to the private channel).</small>
 
 ## Error Responses
 
