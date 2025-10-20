@@ -128,32 +128,15 @@ GET https://neuro.appstun.net/api/v1/schedule/latest
 ```json
 {
   "year": 2025,
-  "week": 32,
+  "week": 42,
   "schedule": [
-    {
-      "day": 0,
-      "time": 1723334400000,
-      "message": "Neuro-sama Stream",
-      "type": "normal"
-    },
-    {
-      "day": 1,
-      "time": 1723420800000,
-      "message": "Evil-sama Stream",
-      "type": "normal"
-    },
-    {
-      "day": 2,
-      "time": 1723507200000,
-      "message": "Offline Day",
-      "type": "offline"
-    },
-    {
-      "day": 3,
-      "time": 1723593600000,
-      "message": "TBD Stream",
-      "type": "TBD"
-    }
+    { "day": 2, "time": 1760464800000, "message": "Neuro Stream", "type": "normal" },
+    { "day": 3, "time": 1760551200000, "message": "Neuro Karaoke", "type": "canceled" },
+    { "day": 4, "time": 1760637600000, "message": "Evil Stream", "type": "normal" },
+    { "day": 5, "time": 1760724000000, "message": "Neuro Fishing 2", "type": "TBD" },
+    { "day": 6, "time": 1760810400000, "message": "Offline", "type": "offline" },
+    { "day": 0, "time": 1760896800000, "message": "Offline", "type": "offline" },
+    { "day": 1, "time": 1760983200000, "message": "Offline", "type": "offline" }
   ],
   "isFinal": true
 }
@@ -193,12 +176,12 @@ GET https://neuro.appstun.net/api/v1/schedule/devstreamtimes
 
 #### Schedule Entry Properties
 
-| Property  | Type   | Description                                          | Always included |
-| --------- | ------ | ---------------------------------------------------- | --------------- |
-| `day`     | number | Day of the week (0-6, Sunday-Saturday)               | Yes             |
-| `time`    | number | Unix timestamp in milliseconds                       | Yes             |
-| `message` | string | Schedule message/description                         | Yes             |
-| `type`    | string | Schedule type: "normal", "offline", "TBD", "unknown" | Yes             |
+| Property  | Type   | Description                                                      | Always included |
+| --------- | ------ | ---------------------------------------------------------------- | --------------- |
+| `day`     | number | Day of the week (0-6, Sunday-Saturday)                           | Yes             |
+| `time`    | number | Unix timestamp in milliseconds                                   | Yes             |
+| `message` | string | Schedule message/description                                     | Yes             |
+| `type`    | string | Schedule type: "normal", "offline", "canceled", "TBD", "unknown" | Yes             |
 
 #### Response Properties
 

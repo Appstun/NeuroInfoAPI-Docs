@@ -7,6 +7,7 @@ It's definitely time to write a changelog for "important" changes to the docs. <
 
 ### Added
 
+- 'canceled' as an day type value  ([schedule.md](schedule.md))
 - 'canceled' to type in ScheduleEntry type in TS-Client ([NeuroInfoAPI-Client](clients/NeuroInfoAPI-Client.ts))
 
 ## [22.09.2025]
