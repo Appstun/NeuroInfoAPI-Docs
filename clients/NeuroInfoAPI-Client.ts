@@ -183,7 +183,7 @@ export interface ScheduleEntry {
   day: number; // Day of the week (0-6, Sunday-Saturday)
   time: number; // Unix timestamp in milliseconds
   message: string; // Schedule message/description
-  type: "normal" | "offline" | "TBD" | "unknown"; // Schedule type
+  type: "normal" | "offline" | "canceled"  | "TBD" | "unknown"; // Schedule type
 }
 
 export interface SubathonData {

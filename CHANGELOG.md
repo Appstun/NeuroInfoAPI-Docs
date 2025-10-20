@@ -3,6 +3,12 @@
 It's definitely time to write a changelog for "important" changes to the docs. <br>
 *<small>Date format: [DD.MM.YYYY]</small>*
 
+## [20.10.2025]
+
+### Added
+
+- 'canceled' to type in ScheduleEntry type in TS-Client ([NeuroInfoAPI-Client](clients/NeuroInfoAPI-Client.ts))
+
 ## [22.09.2025]
 
 ### Added
