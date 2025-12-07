@@ -12,6 +12,10 @@
 
 `GET https://neuro.appstun.net/api/v1/subathon/current`
 
+### Subathon Years
+
+`GET https://neuro.appstun.net/api/v1/subathon/years`
+
 ### Subathon Data (Specific Year)
 
 `GET https://neuro.appstun.net/api/v1/subathon`
@@ -31,6 +35,7 @@ Access Subathon data and goal information. The current subathon endpoint is publ
 #### Description
 
 Get the current active subathon data including goals and subscriber count.
+
 #### Authentication
 
 **Not required** - This is a public endpoint.
@@ -62,6 +67,38 @@ GET https://neuro.appstun.net/api/v1/subathon/current
   "startTimestamp": 1734634800000,
   "endTimestamp": null
 }
+```
+
+### Subathon Years
+
+#### Endpoint
+
+`GET https://neuro.appstun.net/api/v1/subathon/years`
+
+#### Description
+
+Get a list of all years where a subathon took place.
+
+#### Authentication
+
+**Not required** - This is a public endpoint.
+
+#### Parameters
+
+None
+
+#### Request Example
+
+```http
+GET https://neuro.appstun.net/api/v1/subathon/years
+```
+
+#### Response Format
+
+##### Success Response (200)
+
+```json
+[2023, 2024, 2025]
 ```
 
 ### Subathon Data (Specific Year)

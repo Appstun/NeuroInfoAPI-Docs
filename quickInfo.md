@@ -76,6 +76,14 @@ _Full docs of endpoint: [subathon.md](subathon.md)_
 - **Parameters**: None
 - **Public**: Yes
 
+### Subathon Years
+
+`GET /subathon/years`
+
+- **Purpose**: List of all years where a subathon took place
+- **Parameters**: None
+- **Public**: Yes
+
 ### Subathon Data (Specific Year)
 
 `GET /subathon`

@@ -3,6 +3,11 @@
 It's definitely time to write a changelog for "important" changes to the docs. <br>
 *<small>Date format: [DD.MM.YYYY]</small>*
 
+## [07.12.2025]
+
+### Added
+- subathon year list endpoint docs ([subathons.md](subathons.md))
+
 ## [20.10.2025]
 
 ### Added
