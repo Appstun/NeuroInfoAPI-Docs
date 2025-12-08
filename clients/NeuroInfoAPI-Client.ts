@@ -107,10 +107,10 @@ export class NeuroInfoApiClient {
   /**
    * Fetches the latest schedule from the API.
    *
-   * @returns {Promise<ScheduleResponse>} A promise that resolves to the latest schedule data.
+   * @returns {Promise<ScheduleLatestResponse>} A promise that resolves to the latest schedule data.
    * @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/schedule.md#latest-weekly-schedule-1
    */
-  async getLatestSchedule(): Promise<ScheduleResponse> {
+  async getLatestSchedule(): Promise<ScheduleLatestResponse> {
     const response = await this.apiInstance.get("/schedule/latest");
     return response.data;
   }
@@ -177,6 +177,10 @@ export interface ScheduleResponse {
   week: number;
   schedule: ScheduleEntry[];
   isFinal: boolean; // Indicates if the schedule is final or subject to change
+}
+
+export interface ScheduleLatestResponse extends ScheduleResponse {
+  hasActiveSubathon: boolean; // Indicates if there is an active subathon
 }
 
 export interface ScheduleEntry {
