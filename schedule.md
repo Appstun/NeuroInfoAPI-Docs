@@ -105,7 +105,7 @@ Authorization: Bearer YOUR_API_TOKEN
 
 #### Description
 
-Get the most recent weekly schedule available in the database.
+Get the most recent weekly schedule available in the database. Also indicates whether there is an active subathon running.
 
 #### Authentication
 
@@ -138,7 +138,8 @@ GET https://neuro.appstun.net/api/v1/schedule/latest
     { "day": 0, "time": 1760896800000, "message": "Offline", "type": "offline" },
     { "day": 1, "time": 1760983200000, "message": "Offline", "type": "offline" }
   ],
-  "isFinal": true
+  "isFinal": true,
+  "hasActiveSubathon": false
 }
 ```
 
@@ -185,12 +186,13 @@ GET https://neuro.appstun.net/api/v1/schedule/devstreamtimes
 
 #### Response Properties
 
-| Property   | Type    | Description                                        | Always included |
-| ---------- | ------- | -------------------------------------------------- | --------------- |
-| `year`     | number  | Year of the schedule                               | Yes             |
-| `week`     | number  | Calendar week number (1-53)                        | Yes             |
-| `schedule` | array   | Array of schedule entries (see above)              | Yes             |
-| `isFinal`  | boolean | Whether this schedule is considered final/complete | Yes             |
+| Property            | Type    | Description                                        | Always included   |
+| ------------------- | ------- | -------------------------------------------------- | ----------------- |
+| `year`              | number  | Year of the schedule                               | Yes               |
+| `week`              | number  | Calendar week number (1-53)                        | Yes               |
+| `schedule`          | array   | Array of schedule entries (see above)              | Yes               |
+| `isFinal`           | boolean | Whether this schedule is considered final/complete | Yes               |
+| `hasActiveSubathon` | boolean | Whether there is an active subathon running        | Only on `/latest` |
 
 > [!NOTE]
 > Schedule collection & finalization:

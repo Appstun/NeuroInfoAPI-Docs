@@ -3,9 +3,17 @@
 It's definitely time to write a changelog for "important" changes to the docs. <br>
 *<small>Date format: [DD.MM.YYYY]</small>*
 
+## [08.12.2025]
+
+### Added
+
+- 'hasActiveSubathon' as an get latest schedule property ([schedule.md](schedule.md))
+- 'hasActiveSubathon' in TS-Client ([NeuroInfoAPI-Client](clients/NeuroInfoAPI-Client.ts))
+
 ## [07.12.2025]
 
 ### Added
+
 - subathon year list endpoint docs ([subathons.md](subathons.md))
 
 ## [20.10.2025]
@@ -13,7 +21,7 @@ It's definitely time to write a changelog for "important" changes to the docs. <
 ### Added
 
 - 'canceled' as an day type value  ([schedule.md](schedule.md))
-- 'canceled' to type in ScheduleEntry type in TS-Client ([NeuroInfoAPI-Client](clients/NeuroInfoAPI-Client.ts))
+- 'canceled' to type ScheduleEntry in TS-Client ([NeuroInfoAPI-Client](clients/NeuroInfoAPI-Client.ts))
 
 ## [22.09.2025]
 
