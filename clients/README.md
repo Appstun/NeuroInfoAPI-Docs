@@ -21,6 +21,7 @@ A comprehensive TypeScript client that provides full access to all NeuroInfoAPI 
 - 📝 **Full TypeScript Support** - Complete type definitions for all API responses
 - ⏱️ **Timeout Protection** - 10-second request timeout by default
 - ✅ **Type-Safe Error Handling** - Result pattern with `{ data, error }` return type
+- 📡 **Event System** - `NeuroInfoApiEventer` for "real-time" updates
 
 ### Requirements
 
@@ -54,6 +55,44 @@ if (error) {
 // TypeScript knows data is TwitchStreamData here
 console.log(data.title);
 ```
+
+### Event System
+
+Use `NeuroInfoApiEventer` to listen for "real-time" updates:
+
+```typescript
+import { NeuroInfoApiEventer } from "./NeuroInfoAPI-Client";
+
+const eventer = new NeuroInfoApiEventer();
+eventer.setApiToken("your-api-token-here");
+
+// Listen for stream going live
+eventer.on("streamOnline", (stream) => {
+  console.log(`${stream.title} is now live!`);
+});
+
+// With optional error handler
+eventer.on(
+  "scheduleUpdate",
+  (schedule) => console.log(`New schedule for week ${schedule.week}`),
+  (error) => console.log(`Failed to fetch schedule: ${error.code}`)
+);
+
+// Start polling (default: every 60 seconds, minimum: 10 seconds)
+eventer.fetchInterval = 30000; // 30 seconds
+eventer.startEventLoop();
+```
+
+**Available Events:**
+| Event | Description |
+|-------|-------------|
+| `streamOnline` | Stream went live |
+| `streamOffline` | Stream went offline |
+| `streamUpdate` | Any stream data changed |
+| `scheduleUpdate` | Schedule was updated |
+| `subathonUpdate` | Subathon data changed |
+| `subathonGoalUpdate` | A subathon goal was reached/updated |
+
 ---
 
 Need help or found a bug? Feel free to [open an issue](../../issues) or start a [discussion](../../discussions)!

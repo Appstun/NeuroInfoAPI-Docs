@@ -3,6 +3,13 @@
 It's definitely time to write a changelog for "important" changes to the docs. <br>
 *<small>Date format: [DD.MM.YYYY]</small>*
 
+## [24.12.2025]
+
+### Added
+
+- better error handling ([clients/README.md](clients/README.md); [NeuroInfoAPI-Client](clients/NeuroInfoAPI-Client.ts))
+- event system ([clients/README.md](clients/README.md); [NeuroInfoAPI-Client](clients/NeuroInfoAPI-Client.ts))
+
 ## [08.12.2025]
 
 ### Added

@@ -85,39 +85,298 @@ export class NeuroInfoApiClient {
   /** @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/subathon.md#subathon-data-specific-year-1 */
   public getSubathon = (year: number) => this.request<SubathonData>("/subathon", { year });
 }
+
+/**
+ * Event-based wrapper for the NeuroInfo API.
+ * Automatically polls the API at regular intervals and emits events when data changes.
+ * Supports events: streamOnline, streamOffline, streamUpdate, scheduleUpdate, subathonUpdate, subathonGoalUpdate.
+ */
+export class NeuroInfoApiEventer {
+  private client: NeuroInfoApiClient;
+  private eventListeners: Map<ApiClientEvent, Set<EventListenerEntry<any>>> = new Map();
+  private errorHandlers: Map<ApiClientEvent, Set<(error: NeuroApiError) => void>> = new Map();
+  private cached: Map<string, any> = new Map();
+  private fetchTimeout: NodeJS.Timeout | null = null;
+  private isProcessing: boolean = false;
+
+  private _fetchInterval: number = 60000;
+  /** Interval in milliseconds between event fetches. Default is 60000 (60 seconds). Minimum is 10000 (10 seconds). */
+  public get fetchInterval(): number {
+    return this._fetchInterval;
+  }
+  public set fetchInterval(value: number) {
+    this._fetchInterval = Math.max(value, 10000);
+  }
+
+  constructor() {
+    this.client = new NeuroInfoApiClient();
+  }
+
+  private async processEvents() {
+    // Prevent concurrent executions
+    if (this.isProcessing) return;
+    this.isProcessing = true;
+
+    try {
+      const events = new Set(this.eventListeners.keys());
+      const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+      // Determine which API calls are needed
+      const needsStream = events.has("streamOnline") || events.has("streamOffline") || events.has("streamUpdate");
+      const needsSchedule = events.has("scheduleUpdate");
+      const needsSubathon = events.has("subathonUpdate") || events.has("subathonGoalUpdate");
+
+      // Fetch data sequentially with delay between API calls
+      const strResult = needsStream ? await this.client.getCurrentStream() : null;
+      if (needsSchedule && needsStream) await delay(100);
+      const scheResult = needsSchedule ? await this.client.getLatestSchedule() : null;
+      if (needsSubathon && (needsStream || needsSchedule)) await delay(100);
+      const subResult = needsSubathon ? await this.client.getCurrentSubathons() : null;
+
+      // Helper functions
+      const emitError = (event: ApiClientEvent, error: NeuroApiError) =>
+        this.errorHandlers.get(event)?.forEach((handler) => handler(error));
+      const emit = (listeners: Set<EventListenerEntry<any>>, data: any) => listeners.forEach((entry) => entry.callback(data));
+      const hasChanged = (cached: any, current: any) => !cached || JSON.stringify(cached) !== JSON.stringify(current);
+
+      // Process events
+      for (const [event, listeners] of this.eventListeners) {
+        switch (event) {
+          case "streamOnline":
+          case "streamOffline":
+          case "streamUpdate": {
+            if (!strResult?.data) {
+              if (strResult?.error) emitError(event, strResult.error);
+              break;
+            }
+            const cached = this.cached.get("streamData");
+            let shouldEmit = false;
+
+            if (event === "streamOnline") shouldEmit = !cached?.isLive && strResult.data.isLive;
+            else if (event === "streamOffline") shouldEmit = cached?.isLive && !strResult.data.isLive;
+            else shouldEmit = cached && !(cached?.isLive !== strResult.data.isLive) && hasChanged(cached, strResult.data);
+
+            if (shouldEmit) emit(listeners, strResult.data);
+            break;
+          }
+
+          case "scheduleUpdate": {
+            if (!scheResult?.data) {
+              if (scheResult?.error) emitError(event, scheResult.error);
+              break;
+            }
+            if (hasChanged(this.cached.get("latestSchedule"), scheResult.data)) emit(listeners, scheResult.data);
+
+            break;
+          }
+          case "subathonUpdate": {
+            if (!subResult?.data) {
+              if (subResult?.error) emitError(event, subResult.error);
+              break;
+            }
+            const cached: SubathonData[] | undefined = this.cached.get("currentSubathons");
+
+            // New or changed subathons
+            for (const sub of subResult.data) {
+              const cachedSub = cached?.find((s) => s.year === sub.year);
+              if (hasChanged(cachedSub, sub)) emit(listeners, sub);
+            }
+
+            // Removed subathons
+            if (cached) {
+              for (const cachedSub of cached) {
+                if (!subResult.data.find((s) => s.year === cachedSub.year)) {
+                  emit(listeners, { ...cachedSub, isActive: false });
+                }
+              }
+            }
+            break;
+          }
+          case "subathonGoalUpdate": {
+            if (!subResult?.data) {
+              if (subResult?.error) emitError(event, subResult.error);
+              break;
+            }
+            const cached: SubathonData[] | undefined = this.cached.get("currentSubathons");
+
+            for (const sub of subResult.data) {
+              const cachedSub = cached?.find((s) => s.year === sub.year);
+              for (const goalNumber in sub.goals) {
+                const goal = sub.goals[goalNumber];
+                if (hasChanged(cachedSub?.goals[goalNumber], goal))
+                  emit(listeners, { subathon: sub, goal, goalNumber: Number(goalNumber) });
+              }
+            }
+            break;
+          }
+        }
+      }
+
+      // Update cache
+      const updateCache = (key: string, result: ApiResult<any> | null) => {
+        if (result?.data !== undefined && result?.data !== null) this.cached.set(key, result.data);
+        else if (result?.error) this.cached.delete(key);
+      };
+      updateCache("streamData", strResult);
+      updateCache("latestSchedule", scheResult);
+      updateCache("currentSubathons", subResult);
+    } finally {
+      this.isProcessing = false;
+    }
+  }
+
+  /** Starts the event loop that fetches events at regular intervals. */
+  public startEventLoop(): void {
+    if (this.fetchTimeout != null) return;
+    this.processEvents(); // Initial call
+    this.fetchTimeout = setInterval(() => this.processEvents(), this.fetchInterval);
+  }
+
+  /** Stops the event loop that fetches events at regular intervals. */
+  public stopEventLoop(): void {
+    if (this.fetchTimeout == null) return;
+    clearInterval(this.fetchTimeout);
+    this.fetchTimeout = null;
   }
 
   /**
+   * Gets the underlying NeuroInfoApiClient instance.
    *
+   * @returns {NeuroInfoApiClient} The NeuroInfoApiClient instance.
    */
+  public getClient(): NeuroInfoApiClient {
+    return this.client;
+  }
+
+  /** Sets the API token for authentication. Pass `null` to remove the token. */
+  public setApiToken(token: string | null): void {
+    this.client.setApiToken(token);
   }
 
   /**
+   * Registers an event listener for the specified event.
    *
+   * @param event - The event name to listen for.
+   * @param callback - The callback function to be invoked when the event is emitted.
+   * @param onError - (Optional) The callback function to be invoked when an error occurs.
+   * @returns A function to unsubscribe from the event.
    */
+  public on<T extends ApiClientEvent>(event: T, callback: ApiClientEventCallback<T>, onError?: (error: NeuroApiError) => void): () => void {
+    if (!this.eventListeners.has(event)) this.eventListeners.set(event, new Set());
+    const entry: EventListenerEntry<T> = { callback };
+    this.eventListeners.get(event)!.add(entry);
+
+    if (onError) {
+      if (!this.errorHandlers.has(event)) this.errorHandlers.set(event, new Set());
+      this.errorHandlers.get(event)!.add(onError);
+    }
+
+    // Return unsubscribe function
+    return () => {
+      this.eventListeners.get(event)?.delete(entry);
+      if (onError) this.errorHandlers.get(event)?.delete(onError);
+    };
   }
 
   /**
+   * Removes an event listener for the specified event.
    *
+   * @param event - The event name to remove the listener from.
+   * @param callback - The callback function to remove.
    */
+  public off<T extends ApiClientEvent>(event: T, callback: ApiClientEventCallback<T>): void {
+    const listeners = this.eventListeners.get(event);
+    if (listeners) {
+      for (const entry of listeners) {
+        if (entry.callback === callback) {
+          listeners.delete(entry);
+          break;
+        }
+      }
     }
   }
 
   /**
+   * Registers a one-time event listener for the specified event.
+   * The listener will be automatically removed after it is invoked once.
    *
+   * @param event - The event name to listen for.
+   * @param callback - The callback function to be invoked when the event is emitted.
+   * @param onError - (Optional) The callback function to be invoked when an error occurs.
+   * @returns A function to unsubscribe from the event.
    */
+  public once<T extends ApiClientEvent>(
+    event: T,
+    callback: ApiClientEventCallback<T>,
+    onError?: (error: NeuroApiError) => void
+  ): () => void {
+    const unsubscribe = this.on(
+      event,
+      ((data: ApiClientEvents[T]) => {
+        unsubscribe();
+        callback(data);
+      }) as ApiClientEventCallback<T>,
+      onError
+        ? (error: NeuroApiError) => {
+            unsubscribe();
+            onError(error);
+          }
+        : undefined
+    );
+    return unsubscribe;
   }
 
   /**
+   * Emits an event with the specified data to all registered listeners.
    *
+   * @param event - The event name to emit.
+   * @param data - The data to pass to the event listeners.
    */
+  protected emit<T extends ApiClientEvent>(event: T, data: ApiClientEvents[T]): void {
+    const listeners = this.eventListeners.get(event);
+    if (!listeners) return;
+    listeners.forEach((entry) => {
+      try {
+        entry.callback(data);
+      } catch (error) {}
+    });
   }
 
   /**
+   * Removes all event listeners for a specific event or all events.
    *
+   * @param event - (Optional) The event name to remove all listeners from.
+   *                If not provided, removes all listeners for all events.
    */
+  public removeAllListeners(event?: ApiClientEvent): void {
+    if (event) {
+      this.eventListeners.delete(event);
+      this.errorHandlers.delete(event);
+    } else {
+      this.eventListeners.clear();
+      this.errorHandlers.clear();
+    }
   }
 }
+
+// Internal type for storing listener entries
+interface EventListenerEntry<T extends ApiClientEvent> {
+  callback: ApiClientEventCallback<T>;
+}
+
+// Event Types
+export interface ApiClientEvents {
+  streamOnline: TwitchStreamData;
+  streamOffline: TwitchStreamData;
+  streamUpdate: TwitchStreamData;
+  scheduleUpdate: ScheduleLatestResponse;
+  subathonUpdate: SubathonData;
+  subathonGoalUpdate: { subathon: SubathonData; goal: SubathonGoal; goalNumber: number };
+}
+
+export type ApiClientEvent = keyof ApiClientEvents;
+
+export type ApiClientEventCallback<T extends ApiClientEvent> = (data: ApiClientEvents[T]) => void;
 
 export interface TwitchStreamData {
   isLive: boolean;
