@@ -1,5 +1,23 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import axios, { AxiosInstance, isAxiosError } from "axios";
+// Result Types
+type Success<T> = { data: T; error: null };
+type Failure = { data: null; error: NeuroApiError };
+export type ApiResult<T> = Success<T> | Failure;
 
+/**
+ * Custom error class for API errors with code and status information.
+ */
+export class NeuroApiError extends Error {
+  constructor(public code: string, message: string, public status?: number) {
+    super(message);
+    this.name = "NeuroApiError";
+  }
+}
+
+/**
+ * Client for interacting with the NeuroInfo API.
+ * Provides methods to fetch stream data, VODs, schedules, and subathon information.
+ */
 export class NeuroInfoApiClient {
   public apiInstance: AxiosInstance;
 
@@ -11,133 +29,93 @@ export class NeuroInfoApiClient {
         "Content-Type": "application/json",
       },
     });
-
-    this.apiInstance.interceptors.response.use(
-      (response) => response,
-      (error) => {
-        if (error.response?.status === 401)
-          throw new Error("Unauthorized: API Token invalid or missing. Some endpoints require authentication.");
-
-        return Promise.reject(error);
-      }
-    );
   }
 
   /**
-   * Sets the API token for the client instance.
-   *
-   * @param token - The API token to be set. If `null`, the Authorization header will be removed.
-   *                If a string is provided, it will be set as a Bearer token in the Authorization header.
+   * Parses an error into a NeuroApiError with proper code and message.
    */
-  setApiToken(token: string | null): void {
+  private parseError(error: unknown): NeuroApiError {
+    if (isAxiosError(error)) {
+      const apiError = error.response?.data?.error;
+      if (apiError?.code && apiError?.message) return new NeuroApiError(apiError.code, apiError.message, error.response?.status);
+      if (!error.response) return new NeuroApiError("NETWORK", error.message || "Network error");
+      return new NeuroApiError("HTTP_ERROR", `Request failed with status ${error.response.status}`, error.response.status);
+    }
+    return new NeuroApiError("UNKNOWN", String(error));
+  }
+
+  /** Sets the API token for authentication. Pass `null` to remove the token. */
+  public setApiToken(token: string | null): void {
     if (token == null) delete this.apiInstance.defaults.headers.common["Authorization"];
     else this.apiInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   }
 
-  /**
-   * Fetches the current Twitch stream data from the API.
-   *
-   * @returns {Promise<TwitchStreamData>} A promise that resolves to a `TwitchStreamData` object containing
-   *                                      information about the current Twitch stream.
-   * @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/twitch.md#current-stream-status-1
-   */
-  async getCurrentStream(): Promise<TwitchStreamData> {
-    const response = await this.apiInstance.get("/twitch/stream");
-    return response.data;
-  }
-
-  /**
-   * Fetches all Twitch VODs from the API saved in the database.
-   *
-   * @returns {Promise<TwitchVod[]>} A promise that resolves to an array of Twitch VOD objects.
-   * @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/twitch.md#all-vods-1
-   */
-  async getAllVods(): Promise<TwitchVod[]> {
-    const response = await this.apiInstance.get("/twitch/vods");
-    return response.data;
-  }
-
-  /**
-   * Fetches a Twitch VOD (Video on Demand) based on the provided stream ID.
-   *
-   * @param streamId - (Optional) The ID of the stream for which to fetch the VOD.
-   *                   If not provided, the method will fetch a default or latest VOD.
-   * @returns {Promise<TwitchVod>} A promise that resolves to a `TwitchVod` object containing the VOD details.
-   * @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/twitch.md#specific-vod-1
-   */
-  async getVod(streamId?: string): Promise<TwitchVod> {
-    const config: AxiosRequestConfig = {};
-    if (streamId) {
-      config.params = { streamId };
+  /** Generic request wrapper that handles errors consistently. */
+  private async request<T>(url: string, params?: Record<string, any>): Promise<ApiResult<T>> {
+    try {
+      const response = await this.apiInstance.get(url, params ? { params } : undefined);
+      return { data: response.data, error: null };
+    } catch (error) {
+      return { data: null, error: this.parseError(error) };
     }
-    const response = await this.apiInstance.get("/twitch/vod", config);
-    return response.data;
+  }
+
+  /** @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/twitch.md#current-stream-status-1 */
+  public getCurrentStream = () => this.request<TwitchStreamData>("/twitch/stream");
+
+  /** @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/twitch.md#all-vods-1 */
+  public getAllVods = () => this.request<TwitchVod[]>("/twitch/vods");
+
+  /** @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/twitch.md#specific-vod-1 */
+  public getVod = (streamId?: string) => this.request<TwitchVod>("/twitch/vod", streamId ? { streamId } : undefined);
+
+  /** @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/twitch.md#specific-vod-1 */
+  public getLatestVod = () => this.getVod();
+
+  /** @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/schedule.md#specific-weekly-schedule-1 */
+  public getSchedule = (year?: number, week?: number) =>
+    this.request<ScheduleResponse>("/schedule", year || week ? { year, week } : undefined);
+
+  /** @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/schedule.md#latest-weekly-schedule-1 */
+  public getLatestSchedule = () => this.request<ScheduleLatestResponse>("/schedule/latest");
+
+  /** @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/subathon.md#current-subathon-1 */
+  public getCurrentSubathons = () => this.request<SubathonData[]>("/subathon/current");
+
+  /** @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/subathon.md#subathon-data-specific-year-1 */
+  public getSubathon = (year: number) => this.request<SubathonData>("/subathon", { year });
+}
   }
 
   /**
-   * Retrieves the latest Twitch VOD (Video on Demand).
    *
-   * @returns {Promise<TwitchVod>} A promise that resolves to the latest Twitch VOD.
-   * @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/twitch.md#specific-vod-1
    */
-  async getLatestVod(): Promise<TwitchVod> {
-    return this.getVod();
   }
 
   /**
-   * Fetches the schedule for a specified year and week.
    *
-   * @param year - The year for which the schedule is requested (optional).
-   * @param week - The week number for which the schedule is requested (optional).
-   * @returns {Promise<ScheduleResponse>} A promise that resolves to a `ScheduleResponse` containing the schedule data.
-   * @remarks If neither `year` nor `week` is provided, the method fetches a default schedule.
-   * @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/schedule.md#specific-weekly-schedule-1
    */
-  async getSchedule(year?: number, week?: number): Promise<ScheduleResponse> {
-    const config: AxiosRequestConfig = {};
-    if (year || week) {
-      config.params = {};
-      if (year) config.params.year = year;
-      if (week) config.params.week = week;
+  }
+
+  /**
+   *
+   */
     }
-    const response = await this.apiInstance.get("/schedule", config);
-    return response.data;
   }
 
   /**
-   * Fetches the latest schedule from the API.
    *
-   * @returns {Promise<ScheduleLatestResponse>} A promise that resolves to the latest schedule data.
-   * @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/schedule.md#latest-weekly-schedule-1
    */
-  async getLatestSchedule(): Promise<ScheduleLatestResponse> {
-    const response = await this.apiInstance.get("/schedule/latest");
-    return response.data;
   }
 
   /**
-   * Fetches the current active subathons from the API.
    *
-   * @returns {Promise<SubathonData[]>} A promise that resolves to an array of `SubathonData` objects
-   *                                    representing the current subathons.
-   * @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/subathon.md#current-subathon-1
    */
-  async getCurrentSubathons(): Promise<SubathonData[]> {
-    const response = await this.apiInstance.get("/subathon/current");
-    return response.data;
   }
 
   /**
-   * Fetches subathon data for a specific year.
    *
-   * @param year - The year for which the subathon data is requested.
-   * @returns {Promise<SubathonData>} A promise that resolves to a `SubathonData` object
-   *                                  representing the subathon for the specified year.
-   * @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/subathon.md#subathon-data-specific-year-1
    */
-  async getSubathon(year: number): Promise<SubathonData> {
-    const response = await this.apiInstance.get("/subathon", { params: { year } });
-    return response.data;
   }
 }
 
@@ -187,7 +165,7 @@ export interface ScheduleEntry {
   day: number; // Day of the week (0-6, Sunday-Saturday)
   time: number; // Unix timestamp in milliseconds
   message: string; // Schedule message/description
-  type: "normal" | "offline" | "canceled"  | "TBD" | "unknown"; // Schedule type
+  type: "normal" | "offline" | "canceled" | "TBD" | "unknown"; // Schedule type
 }
 
 export interface SubathonData {

@@ -20,6 +20,7 @@ A comprehensive TypeScript client that provides full access to all NeuroInfoAPI 
 - 🔒 **Authentication Support** - Automatic Bearer token handling
 - 📝 **Full TypeScript Support** - Complete type definitions for all API responses
 - ⏱️ **Timeout Protection** - 10-second request timeout by default
+- ✅ **Type-Safe Error Handling** - Result pattern with `{ data, error }` return type
 
 ### Requirements
 
@@ -37,6 +38,22 @@ const client = new NeuroInfoApiClient();
 client.setApiToken("your-api-token-here");
 ```
 
+### Error Handling
+
+All client methods return a result object with either `data` or `error`:
+
+```typescript
+const { data, error } = await client.getCurrentStream();
+
+if (error) {
+  // error is NeuroApiError with code, message, and status
+  console.log(`Error ${error.code}: ${error.message}`);
+  return;
+}
+
+// TypeScript knows data is TwitchStreamData here
+console.log(data.title);
+```
 ---
 
 Need help or found a bug? Feel free to [open an issue](../../issues) or start a [discussion](../../discussions)!
