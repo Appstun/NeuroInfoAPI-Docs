@@ -60,29 +60,53 @@ export class NeuroInfoApiClient {
     }
   }
 
-  /** @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/twitch.md#current-stream-status-1 */
+  /**
+   * Fetches the current stream data.
+   * @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/twitch.md#current-stream-status-1
+   */
   public getCurrentStream = () => this.request<TwitchStreamData>("/twitch/stream");
 
-  /** @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/twitch.md#all-vods-1 */
+  /**
+   * Fetches all VODs (Video on Demand).
+   * @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/twitch.md#all-vods-1
+   */
   public getAllVods = () => this.request<TwitchVod[]>("/twitch/vods");
 
-  /** @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/twitch.md#specific-vod-1 */
+  /**
+   * Fetches a specific VOD by stream ID. If no stream ID is provided, fetches the latest VOD.
+   * @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/twitch.md#specific-vod-1
+   */
   public getVod = (streamId?: string) => this.request<TwitchVod>("/twitch/vod", streamId ? { streamId } : undefined);
 
-  /** @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/twitch.md#specific-vod-1 */
+  /**
+   * Fetches the latest VOD (Video on Demand).
+   * @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/twitch.md#specific-vod-1
+   */
   public getLatestVod = () => this.getVod();
 
-  /** @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/schedule.md#specific-weekly-schedule-1 */
+  /** 
+   * Fetches the schedule for a specific year and week. If no parameters are provided, fetches the current week's schedule.
+   * @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/schedule.md#specific-weekly-schedule-1
+   */
   public getSchedule = (year?: number, week?: number) =>
     this.request<ScheduleResponse>("/schedule", year || week ? { year, week } : undefined);
 
-  /** @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/schedule.md#latest-weekly-schedule-1 */
+  /**
+   * Fetches the latest weekly schedule.
+   *  @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/schedule.md#latest-weekly-schedule-1 
+   */
   public getLatestSchedule = () => this.request<ScheduleLatestResponse>("/schedule/latest");
 
-  /** @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/subathon.md#current-subathon-1 */
+  /** 
+   * Fetches the current active subathons.
+   * @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/subathon.md#current-subathon-1
+   */
   public getCurrentSubathons = () => this.request<SubathonData[]>("/subathon/current");
 
-  /** @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/subathon.md#subathon-data-specific-year-1 */
+  /** 
+   * Fetches subathon data for a specific year.
+   * @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/subathon.md#subathon-data-specific-year-1
+   */
   public getSubathon = (year: number) => this.request<SubathonData>("/subathon", { year });
 }
 
