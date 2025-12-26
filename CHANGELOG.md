@@ -3,6 +3,16 @@
 It's definitely time to write a changelog for "important" changes to the docs. <br>
 *<small>Date format: [DD.MM.YYYY]</small>*
 
+## [26.12.2025]
+
+### Added
+
+- forgotten method for subathon years endpoint in TS-Client ([NeuroInfoAPI-Client](clients/NeuroInfoAPI-Client.ts))
+
+## Changed
+
+- updated method descriptions in TS-Client ([NeuroInfoAPI-Client](clients/NeuroInfoAPI-Client.ts))
+
 ## [24.12.2025]
 
 ### Added

@@ -108,6 +108,12 @@ export class NeuroInfoApiClient {
    * @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/subathon.md#subathon-data-specific-year-1
    */
   public getSubathon = (year: number) => this.request<SubathonData>("/subathon", { year });
+
+  /** 
+   * Fetches the years for which subathon data is available.
+   * @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/subathon.md#subathon-years-1
+   */
+  public getSubathonYears = () => this.request<number[]>("/subathon/years");
 }
 
 /**
