@@ -13,79 +13,79 @@ It's definitely time to write a changelog for "important" changes to the docs. <
 
 ### Added
 
-- forgotten method for subathon years endpoint in TS-Client ([NeuroInfoAPI-Client](clients/NeuroInfoAPI-Client.ts))
+- TS-Client: Added forgotten method for subathon years endpoint([NeuroInfoAPI-Client](clients/NeuroInfoAPI-Client.ts))
 
 ## Changed
 
-- updated method descriptions in TS-Client ([NeuroInfoAPI-Client](clients/NeuroInfoAPI-Client.ts))
+- TS-Client: Updated method descriptions ([NeuroInfoAPI-Client](clients/NeuroInfoAPI-Client.ts))
 
 ## [24.12.2025]
 
 ### Added
 
-- better error handling ([clients/README.md](clients/README.md); [NeuroInfoAPI-Client](clients/NeuroInfoAPI-Client.ts))
-- event system ([clients/README.md](clients/README.md); [NeuroInfoAPI-Client](clients/NeuroInfoAPI-Client.ts))
+- TS-Client: Added better error handling ([clients/README.md](clients/README.md); [NeuroInfoAPI-Client](clients/NeuroInfoAPI-Client.ts))
+- TS-Client: Added event system ([clients/README.md](clients/README.md); [NeuroInfoAPI-Client](clients/NeuroInfoAPI-Client.ts))
 
 ## [08.12.2025]
 
 ### Added
 
-- 'hasActiveSubathon' as an get latest schedule property ([schedule.md](schedule.md))
-- 'hasActiveSubathon' in TS-Client ([NeuroInfoAPI-Client](clients/NeuroInfoAPI-Client.ts))
+- Added 'hasActiveSubathon' as an get latest schedule property ([schedule.md](schedule.md))
+- TS-Client: Added 'hasActiveSubathon' ([NeuroInfoAPI-Client](clients/NeuroInfoAPI-Client.ts))
 
 ## [07.12.2025]
 
 ### Added
 
-- subathon year list endpoint docs ([subathons.md](subathons.md))
+- Added subathon year list endpoint docs ([subathons.md](subathons.md))
 
 ## [20.10.2025]
 
 ### Added
 
-- 'canceled' as an day type value  ([schedule.md](schedule.md))
-- 'canceled' to type ScheduleEntry in TS-Client ([NeuroInfoAPI-Client](clients/NeuroInfoAPI-Client.ts))
+- Added 'canceled' as an day type value  ([schedule.md](schedule.md))
+- TS-Client: Added 'canceled' to type ScheduleEntry ([NeuroInfoAPI-Client](clients/NeuroInfoAPI-Client.ts))
 
 ## [22.09.2025]
 
 ### Added
 
-- Schedule response properties + isFinal property ([schedule.md](schedule.md))
-- isFinal property to ScheduleResponse interface in TS-Client ([NeuroInfoAPI-Client](clients/NeuroInfoAPI-Client.ts))
+- Added Schedule response properties + isFinal property ([schedule.md](schedule.md))
+- TS-Client: Added isFinal property to ScheduleResponse interface ([NeuroInfoAPI-Client](clients/NeuroInfoAPI-Client.ts))
 
 ## [17.09.2025]
 
 ### Added
 
-- Changelog file ([CHANGELOG.md](CHANGELOG.md))
+- Added Changelog file ([CHANGELOG.md](CHANGELOG.md))
 
 ## [03.09.2025]
 
 ### Added
 
-- Missing endpoint infos ([needsAuth.md](needsAuth.md); [schedule.md](schedule.md))
-- Error testing docs ([errors.md](errors.md))
+- Added Missing endpoint infos ([needsAuth.md](needsAuth.md); [schedule.md](schedule.md))
+- Added Error testing docs ([errors.md](errors.md))
 
 ### Changed
 
-- Schedule docs ([schedule.md](schedule.md))
+- Updated schedule docs ([schedule.md](schedule.md))
 
 ## [20.08.2025]
 
 ### Added
 
-- Docs for new endpoint for devstream times ([quickinfo.md](quickinfo.md); [schedule.md](schedule.md))
+- Added docs for new endpoint for devstream times ([quickinfo.md](quickinfo.md); [schedule.md](schedule.md))
 
 ### Removed
 
-- Redundant text ([schedule.md](schedule.md); [subathons.md](subathons.md); [twitch.md](twitch.md))
+- Removed redundant text ([schedule.md](schedule.md); [subathons.md](subathons.md); [twitch.md](twitch.md))
 
 ## [18.08.2025]
 
-### Fixed
+### Changed
 
-- Examples ([twitch.md](twitch.md))
-- Typo ([NeuroInfoAPI-Client](clients/NeuroInfoAPI-Client.ts))
+- Fixed examples ([twitch.md](twitch.md))
+- TS-Client: Fixed typo ([NeuroInfoAPI-Client](clients/NeuroInfoAPI-Client.ts))
 
 ## [17.08.2025]
 
@@ -97,4 +97,4 @@ It's definitely time to write a changelog for "important" changes to the docs. <
 
 ### Added
 
-- TS/JS client & docs ([NeuroInfoAPI-Client](clients/NeuroInfoAPI-Client.ts); [clients/README.md](clients/README.md); [README.md](README.md))
+- Added TS client & docs ([NeuroInfoAPI-Client](clients/NeuroInfoAPI-Client.ts); [clients/README.md](clients/README.md); [README.md](README.md))
