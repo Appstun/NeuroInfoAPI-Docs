@@ -420,7 +420,7 @@ export interface TwitchStreamData {
   tags?: string[];
   isMature?: boolean;
   viewerCount?: number;
-  startedAt?: Date;
+  startedAt?: number; // Unix timestamp
   thumbnailUrl?: string;
 }
 

@@ -3,6 +3,12 @@
 It's definitely time to write a changelog for "important" changes to the docs. <br>
 *<small>Date format: [DD.MM.YYYY]</small>*
 
+## [27.12.2025]
+
+### Changed
+
+- TS-Client: Fixed type of startedAt in TwitchStreamData interface ([NeuroInfoAPI-Client](clients/NeuroInfoAPI-Client.ts))
+
 ## [26.12.2025]
 
 ### Added
