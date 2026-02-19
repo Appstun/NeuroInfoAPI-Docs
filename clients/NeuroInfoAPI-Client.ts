@@ -1,14 +1,20 @@
 import axios, { AxiosInstance, isAxiosError } from "axios";
-// Result Types
+
 type Success<T> = { data: T; error: null };
 type Failure = { data: null; error: NeuroApiError };
 export type ApiResult<T> = Success<T> | Failure;
+
+const baseDomain = "neuro.appstun.net";
 
 /**
  * Custom error class for API errors with code and status information.
  */
 export class NeuroApiError extends Error {
-  constructor(public code: string, message: string, public status?: number) {
+  constructor(
+    public code: string,
+    message: string,
+    public status?: number,
+  ) {
     super(message);
     this.name = "NeuroApiError";
   }
@@ -23,7 +29,7 @@ export class NeuroInfoApiClient {
 
   constructor() {
     this.apiInstance = axios.create({
-      baseURL: `https://neuro.appstun.net/api/v1`,
+      baseURL: `https://${baseDomain}/api/v1`,
       timeout: 10000,
       headers: {
         "Content-Type": "application/json",
@@ -84,7 +90,7 @@ export class NeuroInfoApiClient {
    */
   public getLatestVod = () => this.getVod();
 
-  /** 
+  /**
    * Fetches the schedule for a specific year and week. If no parameters are provided, fetches the current week's schedule.
    * @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/schedule.md#specific-weekly-schedule-1
    */
@@ -93,23 +99,23 @@ export class NeuroInfoApiClient {
 
   /**
    * Fetches the latest weekly schedule.
-   *  @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/schedule.md#latest-weekly-schedule-1 
+   * @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/schedule.md#latest-weekly-schedule-1
    */
   public getLatestSchedule = () => this.request<ScheduleLatestResponse>("/schedule/latest");
 
-  /** 
+  /**
    * Fetches the current active subathons.
    * @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/subathon.md#current-subathon-1
    */
   public getCurrentSubathons = () => this.request<SubathonData[]>("/subathon/current");
 
-  /** 
+  /**
    * Fetches subathon data for a specific year.
    * @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/subathon.md#subathon-data-specific-year-1
    */
   public getSubathon = (year: number) => this.request<SubathonData>("/subathon", { year });
 
-  /** 
+  /**
    * Fetches the years for which subathon data is available.
    * @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/subathon.md#subathon-years-1
    */
@@ -143,7 +149,6 @@ export class NeuroInfoApiEventer {
   }
 
   private async processEvents() {
-    // Prevent concurrent executions
     if (this.isProcessing) return;
     this.isProcessing = true;
 
@@ -151,25 +156,21 @@ export class NeuroInfoApiEventer {
       const events = new Set(this.eventListeners.keys());
       const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-      // Determine which API calls are needed
       const needsStream = events.has("streamOnline") || events.has("streamOffline") || events.has("streamUpdate");
       const needsSchedule = events.has("scheduleUpdate");
       const needsSubathon = events.has("subathonUpdate") || events.has("subathonGoalUpdate");
 
-      // Fetch data sequentially with delay between API calls
       const strResult = needsStream ? await this.client.getCurrentStream() : null;
       if (needsSchedule && needsStream) await delay(100);
       const scheResult = needsSchedule ? await this.client.getLatestSchedule() : null;
       if (needsSubathon && (needsStream || needsSchedule)) await delay(100);
       const subResult = needsSubathon ? await this.client.getCurrentSubathons() : null;
 
-      // Helper functions
       const emitError = (event: ApiClientEvent, error: NeuroApiError) =>
         this.errorHandlers.get(event)?.forEach((handler) => handler(error));
       const emit = (listeners: Set<EventListenerEntry<any>>, data: any) => listeners.forEach((entry) => entry.callback(data));
       const hasChanged = (cached: any, current: any) => !cached || JSON.stringify(cached) !== JSON.stringify(current);
 
-      // Process events
       for (const [event, listeners] of this.eventListeners) {
         switch (event) {
           case "streamOnline":
@@ -206,13 +207,11 @@ export class NeuroInfoApiEventer {
             }
             const cached: SubathonData[] | undefined = this.cached.get("currentSubathons");
 
-            // New or changed subathons
             for (const sub of subResult.data) {
               const cachedSub = cached?.find((s) => s.year === sub.year);
               if (hasChanged(cachedSub, sub)) emit(listeners, sub);
             }
 
-            // Removed subathons
             if (cached) {
               for (const cachedSub of cached) {
                 if (!subResult.data.find((s) => s.year === cachedSub.year)) {
@@ -242,7 +241,6 @@ export class NeuroInfoApiEventer {
         }
       }
 
-      // Update cache
       const updateCache = (key: string, result: ApiResult<any> | null) => {
         if (result?.data !== undefined && result?.data !== null) this.cached.set(key, result.data);
         else if (result?.error) this.cached.delete(key);
@@ -258,7 +256,7 @@ export class NeuroInfoApiEventer {
   /** Starts the event loop that fetches events at regular intervals. */
   public startEventLoop(): void {
     if (this.fetchTimeout != null) return;
-    this.processEvents(); // Initial call
+    this.processEvents();
     this.fetchTimeout = setInterval(() => this.processEvents(), this.fetchInterval);
   }
 
@@ -269,11 +267,7 @@ export class NeuroInfoApiEventer {
     this.fetchTimeout = null;
   }
 
-  /**
-   * Gets the underlying NeuroInfoApiClient instance.
-   *
-   * @returns {NeuroInfoApiClient} The NeuroInfoApiClient instance.
-   */
+  /** Returns the underlying NeuroInfoApiClient instance. */
   public getClient(): NeuroInfoApiClient {
     return this.client;
   }
@@ -301,7 +295,6 @@ export class NeuroInfoApiEventer {
       this.errorHandlers.get(event)!.add(onError);
     }
 
-    // Return unsubscribe function
     return () => {
       this.eventListeners.get(event)?.delete(entry);
       if (onError) this.errorHandlers.get(event)?.delete(onError);
@@ -338,7 +331,7 @@ export class NeuroInfoApiEventer {
   public once<T extends ApiClientEvent>(
     event: T,
     callback: ApiClientEventCallback<T>,
-    onError?: (error: NeuroApiError) => void
+    onError?: (error: NeuroApiError) => void,
   ): () => void {
     const unsubscribe = this.on(
       event,
@@ -351,7 +344,7 @@ export class NeuroInfoApiEventer {
             unsubscribe();
             onError(error);
           }
-        : undefined
+        : undefined,
     );
     return unsubscribe;
   }
@@ -394,7 +387,6 @@ interface EventListenerEntry<T extends ApiClientEvent> {
   callback: ApiClientEventCallback<T>;
 }
 
-// Event Types
 export interface ApiClientEvents {
   streamOnline: TwitchStreamData;
   streamOffline: TwitchStreamData;
@@ -443,18 +435,18 @@ export interface ScheduleResponse {
   year: number;
   week: number;
   schedule: ScheduleEntry[];
-  isFinal: boolean; // Indicates if the schedule is final or subject to change
+  isFinal: boolean;
 }
 
 export interface ScheduleLatestResponse extends ScheduleResponse {
-  hasActiveSubathon: boolean; // Indicates if there is an active subathon
+  hasActiveSubathon: boolean;
 }
 
 export interface ScheduleEntry {
-  day: number; // Day of the week (0-6, Sunday-Saturday)
+  day: number; // 0-6, Sunday-Saturday
   time: number; // Unix timestamp in milliseconds
-  message: string; // Schedule message/description
-  type: "normal" | "offline" | "canceled" | "TBD" | "unknown"; // Schedule type
+  message: string;
+  type: "normal" | "offline" | "canceled" | "TBD" | "unknown";
 }
 
 export interface SubathonData {
@@ -468,7 +460,7 @@ export interface SubathonData {
 }
 
 export interface SubathonGoal {
-  name: string; // Goal title/name
-  completed: boolean; // Whether the goal has been completed
-  reached: boolean; // Whether the goal has been reached (dynamically calculated)
+  name: string;
+  completed: boolean;
+  reached: boolean; // dynamically calculated
 }
