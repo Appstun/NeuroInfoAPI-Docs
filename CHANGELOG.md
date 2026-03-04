@@ -3,6 +3,29 @@
 It's definitely time to write a changelog for "important" changes to the docs. <br>
 *<small>Date format: [DD.MM.YYYY]</small>*
 
+## [04.03.2026]
+
+### Added
+
+- Added WebSocket API docs for ticket flow, handshake auth, events, message format, and errors ([websocket.md](websocket.md))
+
+### Changed
+
+- Updated quick reference with WebSocket endpoints and event overview ([quickInfo.md](quickInfo.md))
+- Updated authentication overview with WebSocket ticket/auth requirements ([needsAuth.md](needsAuth.md))
+- Updated docs index with WebSocket API section ([README.md](README.md))
+- Updated error documentation with WebSocket handshake/message error behavior ([errors.md](errors.md))
+- TS-Client docs: Added WebSocket client usage and event list ([clients/README.md](clients/README.md))
+- TS-Client: Moved client files to new "TypeScript-JavaScript" subfolder (changed structure) ([clients/README.md](clients/README.md); [NeuroInfoAPI-Client.ts](clients/TypeScript-JavaScript/NeuroInfoAPI-Client.ts))
+- Clients: Added Client as JS with type definitions and WebSocket support ([NeuroInfoAPI-Client.js](clients/TypeScript-JavaScript/NeuroInfoAPI-Client.js), [NeuroInfoAPI-Client.d.ts](clients/TypeScript-JavaScript/NeuroInfoAPI-Client.d.ts))
+
+
+## [19.02.2026]
+
+### Changed
+
+- Updated some descriptions & comments in the TS client ([NeuroInfoAPI-Client](clients/NeuroInfoAPI-Client.ts))  
+
 ## [27.12.2025]
 
 ### Changed

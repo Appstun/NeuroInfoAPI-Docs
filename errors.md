@@ -167,6 +167,37 @@ The API implements multiple rate limiting tiers:
 - **Subathon**: Requires year parameter, cannot be future date (`SB3`)
 - **VOD**: Requires valid stream ID (`VD1`)
 
+### WebSocket Errors
+
+The WebSocket API uses two different error formats:
+
+- **Ticket endpoint** (`GET /api/ws/ticket`): Standard JSON errors with API codes (`AU*`, `RL*`)
+- **WebSocket handshake** (`WSS /api/ws`): Plain text HTTP errors (non-JSON)
+- **WebSocket message validation**: Structured WebSocket messages with `type: "invalid"`
+
+#### WebSocket Handshake Errors (plain text)
+
+- `401 Missing authentication (ticket or token required)`
+- `401 Invalid or expired ticket`
+- `401 Invalid or expired token`
+- `429 Connection limit reached (max 5)`
+- `500 Authentication error`
+- `500 Upgrade failed`
+
+#### WebSocket Message Error Example
+
+```json
+{
+  "type": "invalid",
+  "data": {
+    "reason": "malformed",
+    "message": "Could not parse message."
+  }
+}
+```
+
+Possible `reason` values include malformed payloads and missing event type fields.
+
 <br>
 
 ---

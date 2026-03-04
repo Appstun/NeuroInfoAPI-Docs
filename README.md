@@ -12,6 +12,7 @@ This repository contains complete documentation for all API endpoints:
 - **[Schedule API](schedule.md)** - Weekly stream schedules
 - **[Twitch API](twitch.md)** - Stream status and VOD data
 - **[Subathon API](subathon.md)** - Subathon goals and progress
+- **[WebSocket API](websocket.md)** - Real-time events and WebSocket authentication
 - **[Prebuild Clients](clients/README.md)** - ready-to-use clients for your project
 
 ## 📊 API Features
@@ -29,6 +30,13 @@ This repository contains complete documentation for all API endpoints:
 - Complete VOD archive access
 - Cached data for optimal performance
 - Direct Twitch API integration
+
+### WebSocket Events
+
+- Real-time event stream via WebSocket
+- Secure browser auth via one-time ticket endpoint
+- Event subscriptions for stream, schedule, and subathon updates
+- Automatic reconnect support in the TypeScript client
 
 ### Subathon Tracking
 
@@ -48,6 +56,7 @@ This repository contains complete documentation for all API endpoints:
 ## 🔧 API Technical Details
 
 - **Base URL**: `https://neuro.appstun.net/api/v1/`
+- **WebSocket URL**: `wss://neuro.appstun.net/api/ws`
 - **HTTP Methods**: GET only
 - **Response Format**: JSON
 - **Content-Type**: `application/json`

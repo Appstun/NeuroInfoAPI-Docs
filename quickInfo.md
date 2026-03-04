@@ -93,6 +93,27 @@ _Full docs of endpoint: [subathon.md](subathon.md)_
 - **Public**: No (Auth required)
 - **Example**: `/subathon?year=2024`
 
+## WebSocket API
+
+_Full docs of endpoint: [websocket.md](websocket.md)_
+
+### WebSocket Ticket
+
+`GET /api/ws/ticket`
+
+- **Purpose**: Generate one-time ticket for secure WebSocket authentication
+- **Parameters**: None
+- **Public**: No (Auth required)
+
+### WebSocket Connection
+
+`WSS /api/ws`
+
+- **Purpose**: Receive real-time stream/schedule/subathon events
+- **Authentication**: Required (ticket query param or Authorization header)
+- **Event Types**: `scheduleUpdate`, `subathonUpdate`, `subathonGoalUpdate`, `streamOnline`, `streamUpdate`, `streamOffline`, `streamRaidIncoming`, `streamRaidOutgoing`
+- **Example**: `/api/ws?ticket=YOUR_ONE_TIME_TICKET`
+
 ## Authentication
 
 In Header: `Authorization: Bearer YOUR_API_TOKEN`

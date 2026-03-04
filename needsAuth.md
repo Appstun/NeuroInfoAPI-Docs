@@ -22,6 +22,16 @@
 - **`GET /api/v1/subathon`** - Get subathon data for specific year
   - Parameters: `year` (required)
 
+## WebSocket API
+
+- **`GET /api/ws/ticket`** - Get one-time WebSocket ticket
+  - Parameters: None
+
+> [!NOTE]
+> `WSS /api/ws` also requires authentication during handshake:
+> - Browser clients: use `?ticket=...` from `/api/ws/ticket`
+> - Server clients: use `Authorization: Bearer YOUR_API_TOKEN`
+
 ---
 
 ## Public Endpoints (no auth required)
