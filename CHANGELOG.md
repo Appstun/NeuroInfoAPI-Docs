@@ -5,6 +5,10 @@ It's definitely time to write a changelog for "important" changes to the docs. <
 
 ## [08.03.2026]
 
+### Added
+
+- Added `/schedule/search` endpoint docs & JS/TS client method ([schedule.md](schedule.md); [clients/README.md](clients/TypeScript-JavaScript/README.md); [NeuroInfoAPI-Client.ts](clients/TypeScript-JavaScript/NeuroInfoAPI-Client.ts))
+
 ### Changed
 
 - Updated calendar week of oldest schedule in schedule docs ([schedule.md](schedule.md))

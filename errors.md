@@ -75,6 +75,8 @@ All API responses follow a consistent JSON format:
 | `RL4` | `RateLimit_Standard`        | Rate limit exceeded: Maximum 100 requests per minute    |
 | `RL5` | `RateLimit_Generous`        | Rate limit exceeded: Maximum 300 requests per minute    |
 | `RL6` | `RateLimit_Burst`           | Rate limit exceeded: Maximum 10 requests per 10 seconds |
+| `RL7` | `RateLimit_Sensitive`       | Rate limit exceeded: Maximum 2 requests per 10 seconds  |
+| `RL8` | `RateLimit_SearchMinute`    | Rate limit exceeded: Maximum 6 requests per minute      |
 
 ### Subathon Errors (SB)
 
@@ -157,6 +159,8 @@ When an invalid or missing error code is provided:
 The API implements multiple rate limiting tiers:
 
 - **Burst Protection**: 10 requests per 10 seconds (`RL6`)
+- **Sensitive Endpoint Burst**: 2 requests per 10 seconds (`RL7`)
+- **Search Minute Tier**: 6 requests per minute (`RL8`)
 - **Strict Tier**: 30 requests per minute (`RL3`)
 - **Standard Tier**: 100 requests per minute (`RL4`)
 - **Generous Tier**: 300 requests per minute (`RL5`)

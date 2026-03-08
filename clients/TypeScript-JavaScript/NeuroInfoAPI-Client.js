@@ -48,6 +48,24 @@ export class NeuroInfoApiClient {
          */
         this.getLatestSchedule = () => this.request("/schedule/latest");
         /**
+         * Searches schedule entries by message text with optional filters and cursor pagination.
+         * @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/schedule.md#search-weekly-schedules
+         */
+        this.getScheduleSearch = (query, options) => {
+            const params = {
+                query,
+                limit: options?.limit,
+                year: options?.year,
+                sort: options?.sort,
+                type: options?.type,
+            };
+            if (options?.cursor) {
+                params.cursorYear = options.cursor.year;
+                params.cursorWeek = options.cursor.week;
+            }
+            return this.request("/schedule/search", params);
+        };
+        /**
          * Fetches the current active subathons.
          * @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/subathon.md#current-subathon-1
          */

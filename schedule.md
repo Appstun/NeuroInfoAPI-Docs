@@ -15,13 +15,17 @@
 
 `GET https://neuro.appstun.net/api/v1/schedule/latest`
 
+### Search Weekly Schedules
+
+`GET https://neuro.appstun.net/api/v1/schedule/search`
+
 ### Devstream Times
 
 `GET https://neuro.appstun.net/api/v1/schedule/devstreamtimes`
 
 ## Description
 
-Access weekly schedule data from the database. The main endpoint allows you to get a specific week's schedule, while the latest endpoint returns the most recent schedule available. Authentication is required for specific week requests.
+Access weekly schedule data from the database. Use the specific-week endpoint for exact calendar weeks, the latest endpoint for the most recent published schedule, and the search endpoint to find schedule entries by message text with cursor-based pagination.
 
 ## Endpoints Details
 
@@ -143,6 +147,105 @@ GET https://neuro.appstun.net/api/v1/schedule/latest
 }
 ```
 
+### Search Weekly Schedules
+
+#### Endpoint
+
+`GET https://neuro.appstun.net/api/v1/schedule/search`
+
+#### Description
+
+Searches schedule messages (for example: "karaoke", "offline", or game names) and returns matching weeks.
+
+#### Authentication
+
+**Required** - Valid API token must be provided in Authorization header.
+
+#### Parameters
+
+| Parameter    | Type    | Required | Description                                                                     |
+| ------------ | ------- | -------- | ------------------------------------------------------------------------------- |
+| `query`      | string  | Yes      | Search text. Minimum length is 3 characters.                                    |
+| `year`       | integer | No       | Filter results to one year (must be `>= 2023`).                                 |
+| `limit`      | integer | No       | Number of results per page (`1-100`). Default is 25.                            |
+| `sort`       | string  | No       | Sort order by `year/week`: `asc` or `desc` (default: `desc`).                   |
+| `type`       | string  | No       | Filter by schedule day type: `normal`, `offline`, `canceled`, `TBD`, `unknown`. |
+| `cursorYear` | integer | No       | Cursor year from previous response `nextCursor.year` (must be used with week).  |
+| `cursorWeek` | integer | No       | Cursor week from previous response `nextCursor.week` (must be used with year).  |
+
+> [!NOTE]
+> This endpoint uses two limiters: `6 requests / minute` and `2 requests / 10 seconds` per token.
+
+#### Request Examples
+
+```http
+GET https://neuro.appstun.net/api/v1/schedule/search?query=karaoke&limit=5&sort=desc
+Authorization: Bearer YOUR_API_TOKEN
+
+GET https://neuro.appstun.net/api/v1/schedule/search?query=stream&type=normal&limit=10
+Authorization: Bearer YOUR_API_TOKEN
+
+GET https://neuro.appstun.net/api/v1/schedule/search?query=karaoke&limit=5&sort=desc&cursorYear=2026&cursorWeek=9
+Authorization: Bearer YOUR_API_TOKEN
+```
+
+#### Response Format
+
+##### Success Response (200)
+
+```json
+{
+  "nextCursor": {
+    "year": 2026,
+    "week": 8
+  },
+  "results": [
+    {
+      "foundDays": [1, 4],
+      "data": {
+        "year": 2026,
+        "week": 9,
+        "schedule": [
+          {
+            "day": 1,
+            "time": 1772294400000,
+            "message": "Neuro Karaoke",
+            "type": "normal"
+          }
+        ],
+        "isFinal": true
+      }
+    }
+  ]
+}
+```
+
+##### Success Response (200, Last Page)
+
+```json
+{
+  "nextCursor": null,
+  "results": [
+    {
+      "foundDays": [2],
+      "data": {
+        "year": 2024,
+        "week": 43,
+        "schedule": [
+          {
+            "day": 2,
+            "time": 1729641600000,
+            "message": "Karaoke stream",
+            "type": "normal"
+          }
+        ],
+        "isFinal": true
+      }
+    }
+  ]
+}
+```
+
 ### Devstream Times
 
 #### Endpoint
@@ -216,6 +319,28 @@ GET https://neuro.appstun.net/api/v1/schedule/devstreamtimes
 }
 ```
 
+### Missing Search Query (400)
+
+```json
+{
+  "error": {
+    "code": "SC3",
+    "message": "Missing search query parameter"
+  }
+}
+```
+
+### Search Query Too Short (400)
+
+```json
+{
+  "error": {
+    "code": "SC4",
+    "message": "Search query must be at least 3 characters long"
+  }
+}
+```
+
 ### No Schedule Found (404)
 
 ```json
@@ -260,13 +385,37 @@ GET https://neuro.appstun.net/api/v1/schedule/devstreamtimes
 }
 ```
 
+### Search Rate Limit Exceeded (429)
+
+```json
+{
+  "error": {
+    "code": "RL7",
+    "message": "Rate limit exceeded: Maximum 2 requests per 10 seconds"
+  }
+}
+```
+
+### Search Minute Rate Limit Exceeded (429)
+
+```json
+{
+  "error": {
+    "code": "RL8",
+    "message": "Rate limit exceeded: Maximum 6 requests per minute"
+  }
+}
+```
+
 ## Other Notes
 
 - The API uses calendar week numbers (ISO 8601)
 - Specific week requests require authentication and use standard rate limiting
 - Latest schedule endpoint is public with generous rate limiting
+- Search endpoint requires authentication and uses `6/min` + `2/10s` rate limits
 - If only `week` is provided without `year`, the current year is used
-- Valid years range from 2023 to the current year (2025)
+- Valid years range from 2023 to the current year
 - Specific week schedules are cached for 30 minutes
 - Latest schedule is cached for 5 minutes
+- Search responses are cached for 30 seconds
 - Schedule data is globally cached for a minimum of 6 hours, so changed schedules are not immediately available

@@ -81,6 +81,33 @@ if (error) {
 console.log(data.title);
 ```
 
+### Schedule Search Pagination
+
+Use `getScheduleSearch` to search schedule entries and continue with `nextCursor`.
+Optional filter: `type` (`normal`, `offline`, `canceled`, `TBD`, `unknown`).
+
+> [!IMPORTANT]
+> `/schedule/search` uses two limits: `6 requests/minute` and `2 requests/10 seconds` per token.
+> Pagination can continue immediately, but avoid tight loops.
+
+```typescript
+const firstPage = await client.getScheduleSearch("karaoke", { limit: 5, sort: "desc", type: "normal" });
+if (firstPage.error) {
+  console.error(firstPage.error.code, firstPage.error.message);
+} else {
+  console.log("matches:", firstPage.data.results.length);
+
+  if (firstPage.data.nextCursor) {
+    const secondPage = await client.getScheduleSearch("karaoke", {
+      limit: 5,
+      sort: "desc",
+      cursor: firstPage.data.nextCursor,
+    });
+    console.log("next page:", secondPage.data?.results.length ?? 0);
+  }
+}
+```
+
 ### Event System (deprecated)
 
 > [!IMPORTANT]

@@ -27,6 +27,15 @@ _Full docs of endpoint: [schedule.md](schedule.md)_
 - **Parameters**: None
 - **Public**: Yes
 
+### Search Weekly Schedules
+
+`GET /schedule/search`
+
+- **Purpose**: Search schedule messages with cursor-based pagination
+- **Parameters**: `query` (required), `year` (optional), `limit` (optional), `sort` (optional), `type` (optional), `cursorYear` + `cursorWeek` (optional pair)
+- **Public**: No (Auth required)
+- **Example**: `/schedule/search?query=karaoke&limit=10&sort=desc`
+
 ### Devstream Times
 
 `GET /schedule/devstreamtimes`

@@ -107,6 +107,27 @@ export class NeuroInfoApiClient {
   public getLatestSchedule = () => this.request<ScheduleLatestResponse>("/schedule/latest");
 
   /**
+   * Searches schedule entries by message text with optional filters and cursor pagination.
+   * @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/schedule.md#search-weekly-schedules
+   */
+  public getScheduleSearch = (query: string, options?: Omit<ScheduleSearchOptions, "query">) => {
+    const params: Record<string, any> = {
+      query,
+      limit: options?.limit,
+      year: options?.year,
+      sort: options?.sort,
+      type: options?.type,
+    };
+
+    if (options?.cursor) {
+      params.cursorYear = options.cursor.year;
+      params.cursorWeek = options.cursor.week;
+    }
+
+    return this.request<ScheduleSearchResponse>("/schedule/search", params);
+  };
+
+  /**
    * Fetches the current active subathons.
    * @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/subathon.md#current-subathon-1
    */
@@ -1081,6 +1102,35 @@ export interface ScheduleResponse {
 
 export interface ScheduleLatestResponse extends ScheduleResponse {
   hasActiveSubathon: boolean;
+}
+
+export interface ScheduleSearchCursor {
+  year: number;
+  week: number;
+}
+
+export interface ScheduleSearchOptions {
+  query: string;
+  year?: number;
+  limit?: number;
+  sort?: "asc" | "desc";
+  type?: "normal" | "offline" | "canceled" | "TBD" | "unknown";
+  cursor?: ScheduleSearchCursor;
+}
+
+export interface ScheduleSearchResultItem {
+  foundDays: number[];
+  data: {
+    year: number;
+    week: number;
+    schedule: ScheduleEntry[];
+    isFinal: boolean;
+  };
+}
+
+export interface ScheduleSearchResponse {
+  nextCursor: ScheduleSearchCursor | null;
+  results: ScheduleSearchResultItem[];
 }
 
 export interface ScheduleEntry {
