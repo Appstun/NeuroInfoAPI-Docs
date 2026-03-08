@@ -47,7 +47,7 @@ Get a weekly schedule from the database for a given week and year.
 | `year`    | integer | No       | Year (defaults to current year if not provided) |
 
 > [!NOTE]
-> The oldest weekly schedule is week 38 2024.
+> The oldest weekly schedule is week 11 2023. (it's also the oldest schedule in the schedule channel on the Neurosama Discord server)
 
 #### Request Examples
 

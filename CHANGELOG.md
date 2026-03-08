@@ -3,6 +3,12 @@
 It's definitely time to write a changelog for "important" changes to the docs. <br>
 *<small>Date format: [DD.MM.YYYY]</small>*
 
+## [08.03.2026]
+
+### Changed
+
+- Updated calendar week of oldest schedule in schedule docs ([schedule.md](schedule.md))
+
 ## [04.03.2026]
 
 ### Added
