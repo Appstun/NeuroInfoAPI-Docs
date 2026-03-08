@@ -7,3 +7,4 @@ In this directory you can find ready-to-use client libraries for the NeuroInfoAP
 ## Available Clients
 
 - [TypeScript/JavaScript Client](./TypeScript-JavaScript/README.md)
+  - Available as an npm package: [`@neuroinfo/api-client`](https://www.npmjs.com/package/neuroinfoapi-client)

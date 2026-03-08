@@ -8,6 +8,7 @@ It's definitely time to write a changelog for "important" changes to the docs. <
 ### Added
 
 - Added `/schedule/search` endpoint docs & JS/TS client method ([schedule.md](schedule.md); [clients/README.md](clients/TypeScript-JavaScript/README.md); [NeuroInfoAPI-Client.ts](clients/TypeScript-JavaScript/NeuroInfoAPI-Client.ts))
+- Added new NPM package info to clients docs ([clients/README.md](clients/TypeScript-JavaScript/README.md))
 
 ### Changed
 

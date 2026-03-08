@@ -2,9 +2,11 @@
 
 # TypeScript/JavaScript Client
 
-**File:** [`NeuroInfoAPI-Client.ts`](NeuroInfoAPI-Client.ts)
-
 A comprehensive TypeScript client that provides full access to all NeuroInfoAPI endpoints with proper type definitions.
+
+**The client is also available as an NPM package: [`@neuroinfo/api-client`](https://www.npmjs.com/package/neuroinfoapi-client)** 
+
+**File:** [`NeuroInfoAPI-Client.ts`](NeuroInfoAPI-Client.ts)
 
 <br>
 
