@@ -34,7 +34,7 @@ Access Subathon data and goal information. The current subathon endpoint is publ
 
 #### Description
 
-Get the current active subathon data including goals and subscriber count.
+Get all currently active subathons, sorted by year (newest first), including goals and subscriber counts.
 
 #### Authentication
 
@@ -55,18 +55,20 @@ GET https://neuro.appstun.net/api/v1/subathon/current
 ##### Success Response (200)
 
 ```json
-{
-  "year": 2024,
-  "name": "Neuro-sama Subathon 2",
-  "subcount": 165839,
-  "goals": {
-    "1000": { "name": "Neuro Buys Stocks", "completed": true, "reached": true },
-    "100000": { "name": "Abandoned Archive", "completed": false, "reached": true }
-  },
-  "isActive": false,
-  "startTimestamp": 1734634800000,
-  "endTimestamp": null
-}
+[
+  {
+    "year": 2025,
+    "name": "Neuro-sama Subathon 3",
+    "subcount": 132450,
+    "goals": {
+      "1000": { "name": "Goal A", "completed": true, "reached": true },
+      "100000": { "name": "Goal B", "completed": false, "reached": true }
+    },
+    "isActive": true,
+    "startTimestamp": 1764500000000,
+    "endTimestamp": null
+  }
+]
 ```
 
 ### Subathon Years
@@ -226,7 +228,7 @@ Authorization: Bearer YOUR_API_TOKEN
 }
 ```
 
-### Invalid Token (403)
+### Invalid Token (401)
 
 ```json
 {
@@ -254,5 +256,5 @@ Authorization: Bearer YOUR_API_TOKEN
 - Specific year data requires authentication with standard rate limiting
 - Goals are automatically marked as `reached: true` if the current subscriber count meets or exceeds the goal threshold
 - Subathon data is cached and refreshed periodically
-- Multiple subathons can exist, but only the most recent one is returned by the current endpoint
+- Multiple active subathons can exist; `/current` returns an array sorted by year (descending)
 - Goal thresholds are defined as integer subscriber counts in the goals object keys

@@ -28,15 +28,10 @@ export class NeuroInfoApiClient {
          */
         this.getAllVods = () => this.request("/twitch/vods");
         /**
-         * Fetches a specific VOD by stream ID. If no stream ID is provided, fetches the latest VOD.
+         * Fetches a specific VOD by stream ID.
          * @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/twitch.md#specific-vod-1
          */
-        this.getVod = (streamId) => this.request("/twitch/vod", streamId ? { streamId } : undefined);
-        /**
-         * Fetches the latest VOD (Video on Demand).
-         * @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/twitch.md#specific-vod-1
-         */
-        this.getLatestVod = () => this.getVod();
+        this.getVod = (streamId) => this.request("/twitch/vod", { streamId });
         /**
          * Fetches the schedule for a specific year and week. If no parameters are provided, fetches the current week's schedule.
          * @docs https://github.com/Appstun/NeuroInfoAPI-Docs/blob/master/schedule.md#specific-weekly-schedule-1

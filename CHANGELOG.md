@@ -3,6 +3,18 @@
 It's definitely time to write a changelog for "important" changes to the docs. <br>
 *<small>Date format: [DD.MM.YYYY]</small>*
 
+## [16.03.2026]
+
+### Changed
+
+- Corrected `/twitch/vod` docs: `streamId` is required; updated error status sections ([twitch.md](twitch.md); [quickInfo.md](quickInfo.md))
+- Corrected `/subathon/current` success response to array format and clarified behavior ([subathon.md](subathon.md))
+- Clarified effective page size behavior for `/schedule/search` `limit` parameter ([schedule.md](schedule.md))
+- Added missing schedule search error codes `SC3` and `SC4` to error code reference ([errors.md](errors.md))
+- Updated response format wording to reflect endpoint-specific success payloads ([README.md](README.md); [errors.md](errors.md))
+- Added full WebSocket `invalid.reason` value list ([websocket.md](websocket.md))
+- Synced TypeScript client VOD method to current API (`streamId` required, removed latest-VOD shortcut) ([clients/TypeScript-JavaScript/NeuroInfoAPI-Client.ts](clients/TypeScript-JavaScript/NeuroInfoAPI-Client.ts))
+
 ## [08.03.2026]
 
 ### Added

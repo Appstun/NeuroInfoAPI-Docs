@@ -4,13 +4,15 @@
 
 ## Response Format
 
-All API responses follow a consistent JSON format:
+Error responses follow a consistent JSON format. Success responses can differ by endpoint and are shown in each endpoint's documentation.
 
-**Success Response:**
+**Success Response (example):**
 
 ```json
 {
-  "data": { ... }
+  "year": 2026,
+  "week": 11,
+  "schedule": []
 }
 ```
 
@@ -36,10 +38,12 @@ All API responses follow a consistent JSON format:
 
 ### Schedule Errors (SC)
 
-| Code  | Error                 | Description                                                 |
-| ----- | --------------------- | ----------------------------------------------------------- |
-| `SC1` | `Sched_NoSchedule`    | No schedule found in the database for the given week & year |
-| `SC2` | `Sched_InvalidParams` | Invalid year or week parameter                              |
+| Code  | Error                  | Description                                                 |
+| ----- | ---------------------- | ----------------------------------------------------------- |
+| `SC1` | `Sched_NoSchedule`     | No schedule found in the database for the given week & year |
+| `SC2` | `Sched_InvalidParams`  | Invalid year or week parameter                              |
+| `SC3` | `Sched_NoSearchInput`  | Missing search query parameter                              |
+| `SC4` | `Sched_SearchTooShort` | Search query must be at least 3 characters long             |
 
 ### VOD Errors (VD)
 

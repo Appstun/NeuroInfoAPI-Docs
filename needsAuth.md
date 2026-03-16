@@ -14,8 +14,8 @@
 ## Twitch API
 
 - **`GET /api/v1/twitch/vods`** - Get all VODs
-- **`GET /api/v1/twitch/vod`** - Get specific or latest VOD
-  - Parameters: `streamId` (optional)
+- **`GET /api/v1/twitch/vod`** - Get specific VOD
+  - Parameters: `streamId` (required)
 
 ## Subathon API
 

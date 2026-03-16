@@ -4,7 +4,7 @@ Welcome to the **NeuroInfoApi** documentation repository! This API provides comp
 
 ## 📚 Documentation Overview
 
-This repository contains complete documentation for all API endpoints:
+This repository contains documentation for all public API areas:
 
 - **[Quick Reference](quickInfo.md)** - Quick overview of all endpoints
 - **[Authentication Guide](needsAuth.md)** - Endpoints requiring API tokens
@@ -75,7 +75,7 @@ This repository contains complete documentation for all API endpoints:
 - Data is cached for optimal performance
 - Manual updates may cause slight delays in data availability
 - The API uses calendar week numbers (ISO 8601 standard)
-- All responses follow a consistent JSON format (`{data: {...}}` for success, `{error: {...}}` for errors)
+- Error responses follow `{error: {...}}`; success responses are endpoint-specific (object, array, or `{data: {...}}`)
 
 <br>
 

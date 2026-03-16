@@ -278,8 +278,12 @@ Handshake errors return plain text responses (not JSON):
 Possible `reason` values:
 
 - `malformed`
+- `unauthenticated`
 - `missingEventtype`
 - `invalidEventtype`
+- `missingToken`
+- `invalidToken`
+- `authError`
 
 ## Other Notes
 

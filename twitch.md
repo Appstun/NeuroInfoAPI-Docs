@@ -144,7 +144,7 @@ Authorization: Bearer YOUR_API_TOKEN
 
 #### Description
 
-Get a specific VOD by stream ID, or the latest VOD if no ID is provided.
+Get a specific VOD by stream ID.
 
 #### Authentication
 
@@ -154,18 +154,12 @@ Get a specific VOD by stream ID, or the latest VOD if no ID is provided.
 
 | Parameter  | Type   | Required | Description                |
 | ---------- | ------ | -------- | -------------------------- |
-| `streamId` | string | No       | Twitch stream (not VOD ID) |
-
-> [!NOTE]
-> If no specific VOD ID is provided, the latest VOD will be returned
+| `streamId` | string | Yes      | Twitch stream (not VOD ID) |
 
 #### Request Examples
 
 ```http
 GET https://neuro.appstun.net/api/v1/twitch/vod?streamId=123456789
-Authorization: Bearer YOUR_API_TOKEN
-
-GET https://neuro.appstun.net/api/v1/twitch/vod
 Authorization: Bearer YOUR_API_TOKEN
 ```
 
@@ -214,6 +208,17 @@ Authorization: Bearer YOUR_API_TOKEN
 }
 ```
 
+### Missing streamId Parameter (400)
+
+```json
+{
+  "error": {
+    "code": "VD1",
+    "message": "No vod found with the given stream id."
+  }
+}
+```
+
 ### Authentication Required (401)
 
 ```json
@@ -225,7 +230,7 @@ Authorization: Bearer YOUR_API_TOKEN
 }
 ```
 
-### Invalid Token (403)
+### Invalid Token (401)
 
 ```json
 {

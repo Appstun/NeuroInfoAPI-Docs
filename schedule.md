@@ -163,15 +163,15 @@ Searches schedule messages (for example: "karaoke", "offline", or game names) an
 
 #### Parameters
 
-| Parameter    | Type    | Required | Description                                                                     |
-| ------------ | ------- | -------- | ------------------------------------------------------------------------------- |
-| `query`      | string  | Yes      | Search text. Minimum length is 3 characters.                                    |
-| `year`       | integer | No       | Filter results to one year (must be `>= 2023`).                                 |
-| `limit`      | integer | No       | Number of results per page (`1-100`). Default is 25.                            |
-| `sort`       | string  | No       | Sort order by `year/week`: `asc` or `desc` (default: `desc`).                   |
-| `type`       | string  | No       | Filter by schedule day type: `normal`, `offline`, `canceled`, `TBD`, `unknown`. |
-| `cursorYear` | integer | No       | Cursor year from previous response `nextCursor.year` (must be used with week).  |
-| `cursorWeek` | integer | No       | Cursor week from previous response `nextCursor.week` (must be used with year).  |
+| Parameter    | Type    | Required | Description                                                                          |
+| ------------ | ------- | -------- | ------------------------------------------------------------------------------------ |
+| `query`      | string  | Yes      | Search text. Minimum length is 3 characters.                                         |
+| `year`       | integer | No       | Filter results to one year (must be `>= 2023`).                                      |
+| `limit`      | integer | No       | Number of results per page (`1-100`, effective max currently `25`). Default is `25`. |
+| `sort`       | string  | No       | Sort order by `year/week`: `asc` or `desc` (default: `desc`).                        |
+| `type`       | string  | No       | Filter by schedule day type: `normal`, `offline`, `canceled`, `TBD`, `unknown`.      |
+| `cursorYear` | integer | No       | Cursor year from previous response `nextCursor.year` (must be used with week).       |
+| `cursorWeek` | integer | No       | Cursor week from previous response `nextCursor.week` (must be used with year).       |
 
 > [!NOTE]
 > This endpoint uses two limiters: `6 requests / minute` and `2 requests / 10 seconds` per token.
