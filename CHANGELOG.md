@@ -6,6 +6,10 @@ It's definitely time to write a changelog for "important" changes to the docs. <
 
 ## [19.03.2026]
 
+## Added
+
+- Added deepwiki steer config ([.devin/wiki.json](.devin/wiki.json))
+
 ### Changed
 
 - Fixed npm package name mispelling ([clients/README.md](clients/README.md); [clients/TypeScript-JavaScript/README.md](clients/TypeScript-JavaScript/README.md))
