@@ -3,6 +3,13 @@
 It's definitely time to write a changelog for "important" changes to the docs. <br>
 *<small>Date format: [DD.MM.YYYY]</small>*
 
+
+## [19.03.2026]
+
+### Changed
+
+- Fixed npm package name mispelling ([clients/README.md](clients/README.md); [clients/TypeScript-JavaScript/README.md](clients/TypeScript-JavaScript/README.md))
+
 ## [16.03.2026]
 
 ### Changed
