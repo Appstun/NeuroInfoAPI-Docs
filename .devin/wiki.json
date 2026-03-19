@@ -1,0 +1,183 @@
+{
+  "repo_notes": [
+    {
+      "content": "This repository is documentation-first. Prefer the Markdown docs in the root as the source of truth for endpoint behavior, auth rules, and examples: README.md, quickInfo.md, needsAuth.md, errors.md, schedule.md, twitch.md, subathon.md, websocket.md.",
+      "author": "Maintainer"
+    },
+    {
+      "content": "For every REST endpoint, always include: public/private access, required params, rate-limit tier, and cache behavior when documented. Distinguish response shapes clearly because success payloads vary by endpoint while errors are standardized under { error: { code, message } }.",
+      "author": "Maintainer"
+    },
+    {
+      "content": "Treat WebSocket docs as two layers: (1) connection/auth lifecycle (ticket endpoint, handshake, keepalive, connection limits), and (2) message protocol/events (addEvent/removeEvent/listEvents and server message types). Explicitly call out plain-text handshake errors vs JSON invalid messages.",
+      "author": "Maintainer"
+    }
+  ],
+  "pages": [
+    {
+      "title": "NeuroInfoAPI Overview",
+      "purpose": "High-level introduction to the NeuroInfoAPI system based on README.md: what it is, who it is for, base URLs, core domains (Schedule, Twitch, Subathon), and protocols (REST + WebSocket), with links to deeper pages.",
+      "page_notes": [
+        {
+          "content": "Anchor this page to README.md and keep it onboarding-friendly. Include base URL, WebSocket URL, high-level feature list, and where to continue next (quick reference, auth, REST, WebSocket, clients)."
+        }
+      ]
+    },
+    {
+      "title": "Getting Started & Authentication",
+      "purpose": "Step-by-step guide for new developers using needsAuth.md and README.md: obtaining an API token via dashboard, Bearer auth for REST, and ticket/header authentication for WebSocket, including public vs private endpoint distinctions.",
+      "parent": "NeuroInfoAPI Overview",
+      "page_notes": [
+        {
+          "content": "Prioritize actionable auth troubleshooting: missing header, invalid token, and how browser clients should use GET /api/ws/ticket before WSS connect. Include the exact Authorization header format and mention ticket TTL.",
+          "author": "Maintainer"
+        }
+      ]
+    },
+    {
+      "title": "API Quick Reference",
+      "purpose": "Concise reference table from quickInfo.md for all REST endpoints and WebSocket entrypoints: path, HTTP method, public/private status, required parameters, and links to detailed docs.",
+      "parent": "NeuroInfoAPI Overview",
+      "page_notes": [
+        {
+          "content": "Use a compact table layout. Add columns for rate-limit tier and cache interval when known, plus a final column linking to schedule.md, twitch.md, subathon.md, websocket.md, and errors.md."
+        }
+      ]
+    },
+    {
+      "title": "REST API Reference",
+      "purpose": "Overview of the REST API layer from root docs: endpoint grouping, caching strategy, rate-limiting tiers, and standardized error response format, with links to domain pages.",
+      "page_notes": [
+        {
+          "content": "Emphasize that all REST endpoints are GET and that success shapes differ by endpoint. Include one canonical error response example from errors.md and explain where each domain doc provides full schemas."
+        }
+      ]
+    },
+    {
+      "title": "Schedule API",
+      "purpose": "Detailed documentation for all four /schedule endpoints using schedule.md: GET /schedule, GET /schedule/latest, GET /schedule/search, and GET /schedule/devstreamtimes, including parameters, response fields, and pagination behavior.",
+      "parent": "REST API Reference",
+      "page_notes": [
+        {
+          "content": "Highlight search-specific constraints (query length, cursor pair usage, dual rate limits RL7 + RL8). Clearly explain schedule day type values and the meaning of isFinal and hasActiveSubathon."
+        }
+      ]
+    },
+    {
+      "title": "Twitch API",
+      "purpose": "Detailed documentation for /twitch endpoints from twitch.md: stream status, all VODs, and single VOD by streamId, including auth differences and payload fields.",
+      "parent": "REST API Reference",
+      "page_notes": [
+        {
+          "content": "Explicitly warn that GET /twitch/vod expects streamId (not VOD id). Include cache cadence notes (stream updates, VOD refresh windows) and list common VD/AU/RL errors with practical handling guidance."
+        }
+      ]
+    },
+    {
+      "title": "Subathon API",
+      "purpose": "Detailed documentation for /subathon endpoints from subathon.md: current, years, and by-year access, including auth model and schema details.",
+      "parent": "REST API Reference",
+      "page_notes": [
+        {
+          "content": "Document the goals dictionary as threshold-keyed entries and clearly separate reached from completed semantics. Mention manual completion updates and possible differences between visible stream subcount and API state."
+        }
+      ]
+    },
+    {
+      "title": "Error Codes & Rate Limiting",
+      "purpose": "Complete reference from errors.md: API error families (AP/SC/VD/AU/RL/SB), JSON error shape, rate-limit tiers, test endpoint usage, and WebSocket error model differences.",
+      "parent": "REST API Reference",
+      "page_notes": [
+        {
+          "content": "Keep this page implementation-focused: for each important code family, include likely trigger, HTTP status, and suggested client response strategy (retry/backoff/fix params/reauthenticate). Include GET /api/test/geterror examples."
+        }
+      ]
+    },
+    {
+      "title": "WebSocket API",
+      "purpose": "Overview of the real-time WebSocket system from websocket.md: pub/sub model, lifecycle, and how event delivery complements REST polling.",
+      "page_notes": [
+        {
+          "content": "Use this as a hub page only. Keep protocol specifics in child pages, but summarize when to choose WebSocket versus REST and mention event categories available in production."
+        }
+      ]
+    },
+    {
+      "title": "WebSocket Connection & Authentication",
+      "purpose": "Step-by-step connection guide from websocket.md: one-time ticket retrieval, WSS handshake via ticket or Authorization header, welcome/session handling, keepalive behavior, and connection limits.",
+      "parent": "WebSocket API",
+      "page_notes": [
+        {
+          "content": "Include a strict sequence diagram in text form: get token -> request ticket -> connect -> receive welcome -> subscribe. Explicitly include 30-second ticket TTL, one-time ticket usage, 5-connection cap, and 60-second idle timeout."
+        }
+      ]
+    },
+    {
+      "title": "WebSocket Events & Message Protocol",
+      "purpose": "Full protocol reference from websocket.md and the TS client: client message types, server message types, event names, payload expectations, throttling behavior, and invalid-reason handling.",
+      "parent": "WebSocket API",
+      "page_notes": [
+        {
+          "content": "Document every event type with payload shape expectations and include secretneuroaccountOnline behavior. Clarify that streamUpdate is throttled, and provide robust handling guidance for invalid messages and malformed client payloads."
+        }
+      ]
+    },
+    {
+      "title": "Client SDK (TypeScript/JavaScript)",
+      "purpose": "Overview of the TypeScript/JavaScript client documentation in clients/ and clients/TypeScript-JavaScript/: npm package usage (neuroinfoapi-client), environment support, and main classes.",
+      "page_notes": [
+        {
+          "content": "Base this page on clients/README.md and clients/TypeScript-JavaScript/README.md. Mention available files (.ts, .js, .d.ts), axios dependency, browser compatibility, and where each class fits. Explicitly state that the npm package neuroinfoapi-client provides the same API behavior as the local JS/TS client files."
+        }
+      ]
+    },
+    {
+      "title": "NeuroInfoApiClient (REST)",
+      "purpose": "Detailed reference for NeuroInfoApiClient based on clients/TypeScript-JavaScript/NeuroInfoAPI-Client.ts and README: installation, token setup, methods, return types, and error model.",
+      "parent": "Client SDK (TypeScript/JavaScript)",
+      "page_notes": [
+        {
+          "content": "Include practical examples for setApiToken, getScheduleSearch pagination, and ApiResult-style error handling. Note timeout defaults and mention the exposed axios instance for advanced customization when available. Add a short note that using neuroinfoapi-client from npm is functionally equivalent to using the bundled JS/TS client file directly."
+        }
+      ]
+    },
+    {
+      "title": "NeuroInfoApiWebsocketClient (Real-time)",
+      "purpose": "Detailed reference for NeuroInfoApiWebsocketClient using clients/TypeScript-JavaScript/NeuroInfoAPI-Client.ts and README examples: auth mode selection, connect flow, event subscriptions, and reconnect behavior.",
+      "parent": "Client SDK (TypeScript/JavaScript)",
+      "page_notes": [
+        {
+          "content": "Prioritize browser-safe ticket auth defaults and document when header auth is appropriate. Cover system lifecycle events (_connected, _reconnecting, _error, _eventAdded, _eventRemoved) and resubscribe behavior after reconnect."
+        }
+      ]
+    },
+    {
+      "title": "NeuroInfoApiEventer (Deprecated)",
+      "purpose": "Documentation for the deprecated polling-based NeuroInfoApiEventer from clients/TypeScript-JavaScript/README.md and client source, including behavior, limits, and migration guidance.",
+      "parent": "Client SDK (TypeScript/JavaScript)",
+      "page_notes": [
+        {
+          "content": "Clearly mark as deprecated and provide migration mapping to NeuroInfoApiWebsocketClient equivalents. Keep polling details concise: fetchInterval defaults/minimum and state-diff emission behavior."
+        }
+      ]
+    },
+    {
+      "title": "Changelog & Version History",
+      "purpose": "Summary of API and client version history based on CHANGELOG.md and repository structure changes, highlighting behavior-impacting changes and migration notes.",
+      "page_notes": [
+        {
+          "content": "Focus on developer-impacting milestones: endpoint behavior changes, auth flow adjustments, WebSocket additions, deprecated client features, and any renamed/moved client artifacts in clients/TypeScript-JavaScript/."
+        }
+      ]
+    },
+    {
+      "title": "Glossary",
+      "purpose": "Definitions of codebase-specific terms and abbreviations across root docs and client docs, with pointers to the most relevant markdown pages and client files.",
+      "page_notes": [
+        {
+          "content": "Include terms that reduce confusion: streamId vs VOD id, ticket vs token, isFinal, hasActiveSubathon, reached vs completed, cursor pagination, and Ws invalid reasons. Keep entries concise and cross-link to source docs."
+        }
+      ]
+    }
+  ]
+}
