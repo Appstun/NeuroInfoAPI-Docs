@@ -4,6 +4,12 @@ It's definitely time to write a changelog for "important" changes to the docs. <
 *<small>Date format: [DD.MM.YYYY]</small>*
 
 
+## [29.03.2026]
+
+### Added
+
+- Added deepwiki badge to README ([README.md](README.md)) 
+
 ## [19.03.2026]
 
 ## Added

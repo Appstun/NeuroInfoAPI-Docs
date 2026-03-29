@@ -2,6 +2,8 @@
 
 Welcome to the **NeuroInfoApi** documentation repository! This API provides comprehensive access to Neuro-sama stream data, including schedules, VODs, Twitch information, and subathon details.
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Appstun/NeuroInfoAPI-Docs)
+
 ## 📚 Documentation Overview
 
 This repository contains documentation for all public API areas:
